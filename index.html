@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lexi 背單字</title>
+<meta name="theme-color" content="#12776A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Lexi">
+<link rel="apple-touch-icon" href="data:image/png;base64,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gGNs+nK1tp6e495uZ9OjgNW/PwE42BW3VXw3vci93c4VS2DvH0gAhvDIVWU93cO93c4jM2D1H04ARvTanWUrrebebue1PbDxRyMAAFE+BQQQJQAAUcvlcnP0DAAcwAkAIEoAAKIEACBKAACiBAAgSgAAogQAIEoAAKIWPwcG0OQEABAlAABRAgAQJQAAUQIAECUAAFECABC1+DEAgCYnAIAoAQCIEgCAKAEAiBIAgCgBAIgSAIAoAQCIWi7+IgxAkhMAQJQAAEQJAECUAABECQBAlAAARC0+BQrQ5AQAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQtVz8STCAJCcAgCgBAIgSAIAoAQCIWrwHDNDkBAAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUcvFX4UHSHICAIhaHAAAmpwAAKIEACBKAACiBAAgSgAAogQAIEoAAKIEACBKAACiBAAgSgAAogQAIEoAAKIEACBKAACiBAAgSgAAogQAIEoAAKIEACBKAACiBAAg6n/2zLLvv6Q/JgAAAABJRU5ErkJggg==">
+<link rel="icon" href="data:image/png;base64,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gGNs+nK1tp6e495uZ9OjgNW/PwE42BW3VXw3vci93c4VS2DvH0gAhvDIVWU93cO93c4jM2D1H04ARvTanWUrrebebue1PbDxRyMAAFE+BQQQJQAAUcvlcnP0DAAcwAkAIEoAAKIEACBKAACiBAAgSgAAogQAIEoAAKIWPwcG0OQEABAlAABRAgAQJQAAUQIAECUAAFECABC1+DEAgCYnAIAoAQCIEgCAKAEAiBIAgCgBAIgSAIAoAQCIWi7+IgxAkhMAQJQAAEQJAECUAABECQBAlAAARC0+BQrQ5AQAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQtVz8STCAJCcAgCgBAIgSAIAoAQCIWrwHDNDkBAAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUQIAECUAAFECABAlAABRAgAQJQAAUcvFX4UHSHICAIhaHAAAmpwAAKIEACBKAACiBAAgSgAAogQAIEoAAKIEACBKAACiBAAgSgAAogQAIEoAAKIEACBKAACiBAAgSgAAogQAIEoAAKIEACBKAACiBAAg6n/2zLLvv6Q/JgAAAABJRU5ErkJggg==">
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIkxleGkgXHU4MGNjXHU1NWFlXHU1YjU3IiwgInNob3J0X25hbWUiOiAiTGV4aSIsICJzdGFydF91cmwiOiAiLiIsICJzY29wZSI6ICIuIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNGNEYyRUMiLCAidGhlbWVfY29sb3IiOiAiIzEyNzc2QSIsICJpY29ucyI6IFt7InNyYyI6ICJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQWdBQUFBSUFDQUlBQUFCN0drT3RBQUFNUFVsRVFWUjRuTzNkVDI0a1p4bkE0VGFxSXlSU2xraWdKQXBJd0pvczJJUVRnTVFDVGhEV0lad0EyQ2NuWUFFU09RRXNna1N1UUpTWjA3Q1lLTmp6eCtNcGQxVjlYLzJlWjIyTjN5cDF2Ny8rcHR2MnpWdmYvL0VGZ0o3dkhUMEFBTWNRQUlBb0FRQ0lFZ0NBS0FFQWlCSUFnQ2dCQUlnU0FJQW9BUUNJRWdDQUtBRUFpQklBZ0NnQkFJZ1NBSUFvQVFDSUVnQ0FLQUVBaUJJQWdDZ0JBSWdTQUlBb0FRQ0lFZ0NBS0FFQWlGb3VOMGVQQU1BUm5BQUFvcGFMSXdCQWtoTUFRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRdC9pWThRSk1UQUVDVUFBQkVDUUJBbEFBQVJDMFg3d0lESkRrQkFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQzMrSUJoQWt4TUFRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQzBYbndNRlNISUNBSWdTQUlBb0FRQ0lXbzRlQURpSkgzMytoL3UvNEw4Zi8yV2ZTWGlnbTdkKzhKT2pad0NtOU5xTmZ6ODlPSndBQUcvc2thdi9OaGs0a0FBQUQzWEZ2ZjhpSmRpZkFBQ3Z0K25xdjAwRzluVHp0Z0FBOS9wZ3IrMy96TmNhc0JjQkFGNXA1OVYvbXd6c3dNOEJBQzkzNFBZLy9MdEhDQUR3RWlQczN4Rm1PRGNCQUo0M3p1WWRaNUpURWdEZ2p0RjI3bWp6bklrQUFQODM1cllkYzZvVEVBRGdXeVB2MlpGbm05Zk4yei8wTVZEZzhzRm5FMnpZcjMvdnM2SFg1QVFBekxIOUwvUE1PUXNCZ0xxNXR1cGMwdzVPQUFDaUJBRFNabnhCUGVQTVl4SUE2SnAzazg0NytWQUVBQ0JLQUNCcTloZlJzODgvQWdFQWlGb3VsNXVqWndCWXgvcDZGQ2NBS1ByZ3MwK09IdUVLem5FVkJ4SUFnQ2dCZ0p3enZYQSswN1hzVHdBQW9nUUFJRW9BQUtJRUFDQktBS0RsZk8rYW51K0tkaU1BQUZFQ0FCQWxBQUJSQWdBUUpRQUFVWXZmcGdkTXp4NWJ4UWtBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lGajlERGN6UEhsdkRDUUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JxOFNzMGdPblpZNnM0QVFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFTFg2TkhqQS9lMndOSndDQUtBRUFpQklBZ0NnQkFJZ1NBSUFvQVFDSUVnQ0FLQUVBaUZyOC9BUXdQWHRzRlNjQWdDZ0JBSWdTQUlBb0FRQ0lFZ0NBS0FFQWlCSUFnS2pGeDJkSmVmclZGL2Qvd2JzZi9tcWZTYmdpZTJ5ZDVlZ0JZRnV2M2ZqM2Y3MGVjR0lDd0dtOTZlcS81eCtSQVU1SkFEaWJxK3o5Vi8yYlNzQ1pDQURuc2NYcWYrbTNrQUhPd2FlQU9Ja2R0djhoM3d1MjR3VEE5QTVaeDQ0Q25JQVRBSE03OXNXNG93QlRFd0FtTnNMK0hXRUdXR2Z4SXhSTTZ1bFgvemg2aEc4OS9lcUxkei84OWRGVHhObGphemdCTUtWeHR2OHpvODBERHlFQXpHZk1iVHZtVkhBUEFXQXlJKy9aa1dlREZ3a0FNeGwvdzQ0L0lYeEhBSmpHTEx0MWxqbEJBSmpEWEZ0MXJtbkpXbng2Q2piaG1iVW5kM3NWSndBbThQUS84NzJnbm5GbWFnU0EwYzI3U2VlZG5BZ0JBSWdTQUlZMis0dm8yZWZuM0FRQUlFb0FBS0lFZ0hHZDQvOVB6bkVWbkpJQUFFUUpBSU02MHd2bk0xMExaeUlBQUZFQ0FCQWxBQUJSQWdBUUpRQ002SHp2bXA3dmlqZ0JBUUNJRWdDQUtBRUFpRnI4S1IzWWkrZmFkdHpiTlp3QUFLSUVBQ0JLQUFDaUJBQWdhdkhlQ2V6RWMyMDc3dTBxVGdBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFTFg0YThxd0Y4KzE3YmkzYXpnQkFFUXR3Z2s3OFZ6YmpudTdpaE1BUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUxUYzNOMGZQd1BPZS9QdnY5My9CZTcvNHpUNlRjRVdlYTl0eGI5ZFpqaDZBeStVQkcvLytyOWNEWUFVQk9OaWJydjU3L2hFWkFONklBQnpqS252L1ZmK21FZ0FQSVFCNzIyTDF2L1JieUFCd1A1OEMydFVPMi8rUTd3WE15QWxnSjRlc1kwY0I0QjVPQUhzNDlzVzRvd0R3VWdLd3VSSDI3d2d6QUtNUmdHMk5zM25IbVFRWWhBQnNhTFNkTzlvOHdMRUVZQ3RqYnRzeHB3SU9JUUNiR0huUGpqd2JzQ2NCdUw3eE4rejRFd0k3RUlBcm0yVzN6akluc0IwQnVLYTV0dXBjMHdKWEp3QUFVUUp3TlRPK29KNXhadUJhQk9BNjV0Mms4MDRPUEpJQUFFUUp3QlhNL2lKNjl2bUJkUVFBSUVvQUFLSUU0TEhPOGY4bjU3Z0s0STBzbDV1alIyQVFIZ2xiYzRlMzQ5NnU0Z1R3S0UrK1BNOEw1ek5kQy9BUWkzUnlpd2ZEcHR6ZTdiaTNhemdCQUVRSkFFQ1VBQUJFQ2NCNlQ3NzgyOUVqWE5uNXJnaTRod0FBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRURVNG04cGM0Zkh3M2JjMisyNHQ2czRBUUJFQ1FCQWxBQUFSQWtBUU5UaTNSUHU4bmpZam51N0hmZDJEU2NBZ0NnQkFJZ1NBSUFvQVFDSUVnQ0FLQUVBaUJJQWdDZ0JBSWdTQUlBb0FRQ0lFZ0NBS0FFQWlCSUFnQ2dCQUlnU0FJQW9BUUNJRWdDQXFNVWYwdUVPajRmdHVMZmJjVzlYY1FJQWlCSUFnQ2dCQUlnU0FJQW9BUUNJRWdDQXFNWG5wN2pMNDJFNzd1MTIzTnMxbkFBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUdyeDR4UGM1dkd3SGZkMk8rN3RPazRBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGR0xEOUJ5aDhmRGR0emI3YmkzcXpnQkFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVEVTRpY291TXZqWVR2dTdYYmMyeldjQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpRnI5RWp6czhIcmJqM203SHZWM0ZDUUFnU2dBQW9nUUFJRW9BMW52L285OGVQY0tWalhORjQweHlMZU5jMFpOUFB6dDZoQ3M3M3hYdFJnQUFvZ1FBSUVvQUFLSUVBQ0JLQUI1bG5IZjJIbSswYXhsdG5zY1k3VnJPOUs3cG1hNWxmd0lBRUhYenprOS9mdlFNMC92bVgzODllb1RIZXYrajN4MDl3c3U1dDl0NTc4OGZIejNDWXozNTlQT2pSNWliRXdCQWxBQUFSQW5BRlF4N3huK2drZWNmZWJhSEdIbisyZi8vWlBiNVJ5QUFBRkVDY0IwanY5QzczL2lUanovaHE0dy8rYnd2b3VlZGZDZ0NjRFhqUDl0Zk5Ndk1zOHg1Mnl3eno3aEpaNXg1VEFJQUVDVUExelRMaTc1blRMdWR1YWFkNndYMVhOTU9UZ0N1Ykpabi9peHozamJMekxQTWVkc3NXM1dXT1djaEFOYzMvdk4vL0FsZlpmekp4NS93VmNiZnJlTlBPQjBCMk1USVcyRGsyUjVpNVBsSG51MGhSdDZ3STg4MnI1dDNmdVozQVczbG0zOE85M3RzM3YvbDNCdnFPKzd0ZHQ3NzAzQy9JK2pKSDIzL1RUZ0JiR2kwalREYVBJOHgycldNTnM5ampMWnRSNXZuVEFSZ1crUHNoWEVtdVpaeHJtaWNTYTVsbkowN3ppU25KQUNiRzJFN2pERERGa2E0cmhGbTJNSUltM2VFR2M1TkFQWnc3STQ0NjRaNnhyM2R6ckg3MS9iZmdUZUJkN1h6VzVmblhrL1BjVyszcy9QYndsYi9icHdBZHJYbjFraHRxSXQ3dTZVOU43THR2eWNuZ0dOcytuSzF0cDZlNDk1dVo5T2pnTlcvUHdFNDJCVzNWWHczdmNpOTNjNFZTMkR2SDBnQWh2RElWV1U5M2NPOTNjNGpNMkQxSDA0QVJ2VGFuV1VycmViZWJ1ZTFQYkR4UnlNQUFGRStCUVFRSlFBQVVjdmxjblAwREFBY3dBa0FJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSVdQd2NHME9RRUFCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkMxK0RFQWdDWW5BSUFvQVFDSUVnQ0FLQUVBaUJJQWdDZ0JBSWdTQUlBb0FRQ0lXaTcrSWd4QWtoTUFRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQzArQlFyUTVBUUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRdFZ6OFNUQ0FKQ2NBZ0NnQkFJZ1NBSUFvQVFDSVdyd0hETkRrQkFBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVY3ZGWDRVSFNISUNBSWhhSEFBQW1wd0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnNm4vMnpMTHZ2NlEvSmdBQUFBQkpSVTVFcmtKZ2dnPT0iLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogImFueSJ9XX0=">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  --paper:#F4F2EC;--surface:#FFFFFF;--surface-2:#FBFAF6;
+  --ink:#1E1E28;--ink-soft:#61616E;--ink-faint:#9A9AA4;--line:#E6E3DA;
+  --accent:#12776A;--accent-ink:#0C5C52;
+  --ok:#2E9E6B;--ok-bg:#E7F5EE;--bad:#D25A5A;--bad-bg:#FBE9E7;
+  --lv-A1:#5B8C5A;--lv-A2:#2F9C8B;--lv-B1:#3B82A6;--lv-B2:#5A6BB5;--lv-C1:#8A5AA6;--lv-C2:#A8497E;
+  --shadow:0 1px 2px rgba(30,30,40,.05),0 8px 24px rgba(30,30,40,.06);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#15151B;--surface:#1E1E27;--surface-2:#22222C;
+  --ink:#ECEBE6;--ink-soft:#A6A6B2;--ink-faint:#6E6E7A;--line:#2E2E39;
+  --accent:#3FB8A6;--accent-ink:#57C9B8;
+  --ok:#4FC08A;--ok-bg:#16332A;--bad:#E07A7A;--bad-bg:#3A211F;
+  --lv-A1:#79B078;--lv-A2:#4EC0AE;--lv-B1:#5AA6CC;--lv-B2:#8290D6;--lv-C1:#B27FCB;--lv-C2:#CE6EA0;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.35);
+}}
+:root[data-theme="dark"]{
+  --paper:#15151B;--surface:#1E1E27;--surface-2:#22222C;
+  --ink:#ECEBE6;--ink-soft:#A6A6B2;--ink-faint:#6E6E7A;--line:#2E2E39;
+  --accent:#3FB8A6;--accent-ink:#57C9B8;
+  --ok:#4FC08A;--ok-bg:#16332A;--bad:#E07A7A;--bad-bg:#3A211F;
+  --lv-A1:#79B078;--lv-A2:#4EC0AE;--lv-B1:#5AA6CC;--lv-B2:#8290D6;--lv-C1:#B27FCB;--lv-C2:#CE6EA0;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--paper)}
+body{font-family:"Noto Sans TC",-apple-system,system-ui,sans-serif;color:var(--ink);
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;line-height:1.5}
+.serif{font-family:"Newsreader",serif}
+.wrap{max-width:560px;margin:0 auto;padding:0 18px;
+  padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+button{font-family:inherit}
+
+/* header */
+header{position:sticky;top:0;z-index:20;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);
+  padding-top:calc(env(safe-area-inset-top,0px) + 12px);border-bottom:1px solid transparent;transition:border-color .2s}
+header.stuck{border-bottom-color:var(--line)}
+.head-in{max-width:560px;margin:0 auto;padding:0 18px 12px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:baseline;gap:9px}
+.brand h1{font-family:"Newsreader",serif;font-weight:600;font-size:25px;letter-spacing:-.01em;margin:0}
+.brand span{font-size:12.5px;color:var(--ink-faint)}
+.theme-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);
+  width:34px;height:34px;border-radius:11px;font-size:15px;cursor:pointer;display:grid;place-items:center;flex:0 0 auto}
+.theme-btn:active{transform:scale(.93)}
+
+/* generic */
+.pill{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;color:#fff;line-height:1}
+.lv-A1{background:var(--lv-A1)}.lv-A2{background:var(--lv-A2)}.lv-B1{background:var(--lv-B1)}
+.lv-B2{background:var(--lv-B2)}.lv-C1{background:var(--lv-C1)}.lv-C2{background:var(--lv-C2)}
+.pos{font-size:13px;color:var(--ink-soft);font-style:italic;font-family:"Newsreader",serif}
+.btn{border:none;border-radius:14px;padding:14px 18px;font-size:15.5px;font-weight:500;cursor:pointer;transition:transform .1s,opacity .15s}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--accent);color:#fff;box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 40%,transparent)}
+.btn.ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line)}
+.btn.block{display:block;width:100%;text-align:center}
+.spk{flex:0 0 auto;border:none;cursor:pointer;background:var(--accent);color:#fff;display:grid;place-items:center;
+  border-radius:50%;box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 45%,transparent);transition:transform .12s}
+.spk:active{transform:scale(.9)}
+.spk.speaking{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.spk svg,.spk-sm svg{display:block}
+.spk.big{width:76px;height:76px;margin:6px auto}.spk.big svg{width:34px;height:34px}
+.spk.mid{width:52px;height:52px}.spk.mid svg{width:24px;height:24px}
+.spk-sm{flex:0 0 auto;border:1px solid var(--line);background:var(--surface-2);color:var(--accent-ink);
+  width:40px;height:40px;border-radius:12px;display:grid;place-items:center;cursor:pointer;transition:transform .12s}
+.spk-sm:active{transform:scale(.9)}.spk-sm.speaking{color:#fff;background:var(--accent);border-color:var(--accent)}
+.spk-sm svg{width:19px;height:19px}
+
+/* screens */
+.screen{display:none}.screen.active{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* today */
+.hello{margin-top:20px}
+.hello h2{font-family:"Newsreader",serif;font-weight:500;font-size:26px;margin:0 0 2px}
+.hello .streak{font-size:14px;color:var(--ink-soft)}
+.hello .streak b{color:var(--accent-ink)}
+.stat-row{display:flex;gap:12px;margin-top:18px}
+.stat{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 16px;box-shadow:var(--shadow)}
+.stat .n{font-family:"Newsreader",serif;font-size:34px;font-weight:600;line-height:1}
+.stat .l{font-size:12.5px;color:var(--ink-soft);margin-top:4px}
+.stat.due .n{color:var(--accent-ink)}
+.cta{margin-top:16px}
+.subacts{display:flex;gap:10px;margin-top:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.subacts::-webkit-scrollbar{display:none}
+.subact{flex:0 0 auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:11px 15px;font-size:13.5px;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:7px}
+.subact:active{transform:scale(.96)}
+.subact svg{width:16px;height:16px;color:var(--accent-ink)}
+.empty{margin-top:16px;background:var(--surface-2);border:1px dashed var(--line);border-radius:16px;
+  padding:22px;text-align:center;color:var(--ink-soft);font-size:14px}
+.checkin{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:16px}
+.ci-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:13px}
+.ci-title{font-family:"Newsreader",serif;font-size:20px;font-weight:600}
+.ci-prog{font-size:12.5px;color:var(--ink-faint)}
+.quests{display:flex;flex-direction:column;gap:8px}
+.quest{display:flex;align-items:center;gap:13px;width:100%;text-align:left;background:var(--surface-2);
+  border:1px solid var(--line);border-radius:14px;padding:13px 14px;cursor:pointer;transition:transform .1s}
+.quest:active{transform:scale(.98)}
+.quest.done{opacity:.5}
+.quest .qi{width:36px;height:36px;border-radius:11px;background:var(--paper);display:grid;place-items:center;font-size:18px;flex:0 0 auto}
+.quest.done .qi{background:var(--ok-bg);color:var(--ok);font-weight:700}
+.quest .qb{flex:1;min-width:0;display:flex;flex-direction:column}
+.quest .qn{font-size:15px;font-weight:500}
+.quest .qs{font-size:12.5px;color:var(--ink-faint);margin-top:1px}
+.quest .qarrow{color:var(--ink-faint);font-size:20px;flex:0 0 auto}
+.quest.done .qarrow{display:none}
+.stamp{text-align:center;padding:16px;background:var(--ok-bg);border-radius:14px;color:var(--ok);font-weight:700;font-size:16px}
+.stamp .stampsub{font-size:12.5px;color:var(--ink-soft);font-weight:500;margin-top:3px}
+.sublabel{font-size:12.5px;color:var(--ink-faint);margin:24px 2px 10px}
+
+/* filters + list (word list) */
+.filters{display:flex;gap:8px;overflow-x:auto;padding:16px 0 6px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);
+  font-size:13.5px;font-weight:500;padding:7px 15px;border-radius:999px;cursor:pointer;transition:all .15s}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip.lvl[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+.chip:active{transform:scale(.95)}
+.count{font-size:12.5px;color:var(--ink-faint);padding:6px 2px 4px}
+.list{display:flex;flex-direction:column;gap:10px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+.card-main{display:flex;align-items:center;gap:12px;padding:14px 15px 14px 18px;cursor:pointer}
+.card-body{flex:1;min-width:0}
+.row1{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.card .w{font-family:"Newsreader",serif;font-weight:500;font-size:22px;letter-spacing:-.01em}
+.card .ph{font-family:"Newsreader",serif;font-style:italic;font-size:14px;color:var(--ink-faint)}
+.row2{display:flex;align-items:center;gap:8px;margin-top:3px}
+.sdot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.sdot.new{background:var(--ink-faint)}.sdot.learning{background:#E0A93B}
+.sdot.review{background:var(--accent)}.sdot.known{background:var(--ok)}
+.card .m{font-size:14.5px;color:var(--ink-soft);margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.example{max-height:0;opacity:0;overflow:hidden;transition:max-height .3s ease,opacity .22s;padding:0 18px}
+.card.open .example{max-height:260px;opacity:1;padding-bottom:15px}
+.example .en{font-family:"Newsreader",serif;font-size:16px;line-height:1.5;display:flex;gap:9px;align-items:flex-start}
+.ex-play{flex:0 0 auto;color:var(--accent-ink);background:none;border:none;cursor:pointer;padding:2px;margin-top:2px}
+.ex-play svg{width:16px;height:16px;display:block}
+.lvedit{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.lvedit .lbl{font-size:12px;color:var(--ink-faint);margin-bottom:7px}
+.lvedit .row{display:flex;gap:6px;flex-wrap:wrap}
+.mini{border:1px solid var(--line);background:var(--surface-2);color:var(--ink-soft);
+  font-size:12px;font-weight:700;padding:5px 10px;border-radius:8px;cursor:pointer}
+.mini[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+
+/* bottom nav */
+nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,var(--paper) 90%,transparent);
+  backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);
+  border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav-in{max-width:560px;margin:0 auto;display:flex}
+.tab{flex:1;background:none;border:none;padding:9px 0 8px;cursor:pointer;color:var(--ink-faint);
+  display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;transition:color .15s}
+.tab svg{width:22px;height:22px}
+.tab.on{color:var(--accent-ink)}
+.tab:active{transform:scale(.92)}
+
+/* full overlay (session / test) */
+.overlay{position:fixed;inset:0;z-index:50;background:var(--paper);display:none;flex-direction:column;
+  padding-top:env(safe-area-inset-top,0px)}
+.overlay.active{display:flex}
+.ov-head{display:flex;align-items:center;gap:12px;padding:14px 18px 10px}
+.ov-head .close{background:none;border:none;color:var(--ink-soft);font-size:22px;cursor:pointer;flex:0 0 auto;line-height:1}
+.progress{flex:1;height:7px;background:var(--line);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.ov-head .pc{font-size:12.5px;color:var(--ink-soft);flex:0 0 auto;min-width:38px;text-align:right}
+.ov-body{flex:1;overflow-y:auto;padding:6px 20px 30px;max-width:560px;margin:0 auto;width:100%}
+
+.q-prompt{margin-top:14px}
+.q-label{font-size:13px;color:var(--ink-faint);margin-bottom:14px}
+.q-word{font-family:"Newsreader",serif;font-weight:500;font-size:46px;line-height:1.05;letter-spacing:-.02em;word-break:break-word}
+.q-word-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.q-phon{font-family:"Newsreader",serif;font-style:italic;font-size:19px;color:var(--ink-soft);margin-top:6px}
+.q-zh{font-family:"Newsreader",serif;font-size:15px}
+.q-cloze{font-family:"Newsreader",serif;font-size:23px;line-height:1.5}
+.q-cloze u{color:var(--accent-ink);text-decoration:none;border-bottom:2px dashed var(--accent);padding:0 22px}
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+.opt{text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;
+  padding:15px 16px;font-size:16px;color:var(--ink);cursor:pointer;transition:transform .08s,border-color .15s;font-weight:500}
+.opt.serif{font-family:"Newsreader",serif;font-size:19px}
+.opt:active{transform:scale(.99)}
+.opt:disabled{cursor:default}
+.opt.correct{border-color:var(--ok);background:var(--ok-bg);color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg);color:var(--bad)}
+.spell-in{width:100%;margin-top:20px;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;
+  padding:16px;font-size:22px;font-family:"Newsreader",serif;color:var(--ink);text-align:center;outline:none}
+.spell-in:focus{border-color:var(--accent)}
+.afterbar{margin-top:20px}
+.reveal{background:var(--surface-2);border:1px solid var(--line);border-radius:16px;padding:16px}
+.reveal.wrong-note{border-color:color-mix(in srgb,var(--bad) 40%,var(--line))}
+.reveal .r1{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.reveal .rw{font-family:"Newsreader",serif;font-size:28px;font-weight:500}
+.reveal .rp{font-family:"Newsreader",serif;font-style:italic;font-size:15px;color:var(--ink-soft);margin-top:2px}
+.reveal .rm{font-size:16px;margin-top:8px}
+.reveal .rex{font-family:"Newsreader",serif;font-size:14.5px;color:var(--ink-soft);margin-top:8px;line-height:1.45}
+.afterbtns{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.hintline{font-size:12.5px;color:var(--ink-faint);text-align:center;margin-top:12px}
+.hintbox{font-family:"Newsreader",serif;font-size:24px;letter-spacing:.06em;text-align:center;
+  color:var(--accent-ink);min-height:20px;margin-bottom:12px}
+
+/* end / result */
+.result{text-align:center;padding:40px 10px}
+.result .big{font-family:"Newsreader",serif;font-size:54px;font-weight:600;color:var(--accent-ink);line-height:1}
+.result h3{font-family:"Newsreader",serif;font-weight:500;font-size:24px;margin:18px 0 6px}
+.result p{color:var(--ink-soft);font-size:14.5px;margin:4px 0}
+.res-stats{display:flex;gap:12px;justify-content:center;margin:22px 0 26px}
+.res-stats .s{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 18px;min-width:78px}
+.res-stats .s .n{font-family:"Newsreader",serif;font-size:26px;font-weight:600}
+.res-stats .s .l{font-size:11.5px;color:var(--ink-faint);margin-top:2px}
+
+/* stats screen */
+.sec{margin-top:22px}
+.sec h3{font-family:"Newsreader",serif;font-weight:500;font-size:18px;margin:0 0 12px}
+.mbar{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.mbar .lv{width:26px;font-size:12px;font-weight:700;color:var(--ink-soft)}
+.mbar .track{flex:1;height:12px;background:var(--line);border-radius:99px;overflow:hidden}
+.mbar .track i{display:block;height:100%;background:var(--c);border-radius:99px;transition:width .5s}
+.mbar .pct{width:64px;text-align:right;font-size:11.5px;color:var(--ink-faint)}
+.week{display:flex;align-items:flex-end;gap:8px;height:110px;padding:6px 0}
+.week .d{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.week .d .bar{width:70%;max-width:26px;background:var(--accent);border-radius:6px 6px 3px 3px;min-height:3px;transition:height .5s;opacity:.9}
+.week .d .lab{font-size:10px;color:var(--ink-faint)}
+.missed{display:flex;flex-direction:column;gap:8px}
+.missed .mi{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.missed .mi .w{font-family:"Newsreader",serif;font-size:18px;font-weight:500;flex:1}
+.missed .mi .c{font-size:12.5px;color:var(--bad);font-weight:700}
+
+/* settings */
+.set-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px 16px;box-shadow:var(--shadow)}
+.set-row{padding:15px 0;border-bottom:1px solid var(--line)}
+.set-row:last-child{border-bottom:none}
+.set-row .t{font-size:15px;font-weight:500}
+.set-row .d{font-size:12.5px;color:var(--ink-faint);margin-top:2px}
+.lvgrid{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.lvtog{border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink-soft);font-size:13px;font-weight:700;
+  padding:9px 16px;border-radius:11px;cursor:pointer}
+.lvtog[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+.steps{display:flex;gap:8px;margin-top:12px}
+.step{flex:1;border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink-soft);
+  padding:10px 0;border-radius:11px;font-size:14px;font-weight:600;cursor:pointer;text-align:center}
+.step[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.io-area{width:100%;margin-top:10px;min-height:60px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);
+  color:var(--ink-soft);font-size:11px;padding:8px;font-family:monospace;display:none}
+.danger{color:var(--bad)}
+footer{text-align:center;font-size:11.5px;color:var(--ink-faint);padding:30px 0 4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <div class="head-in">
+    <div class="brand"><h1 class="serif">Lexi</h1><span id="brandsub">背單字 · 測試版</span></div>
+    <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">◐</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- TODAY -->
+  <section class="screen active" id="s-today">
+    <div class="hello">
+      <h2 class="serif" id="greet">今天來背單字</h2>
+      <div class="streak" id="streakLine"></div>
+    </div>
+    <div class="checkin" id="checkin"></div>
+    <div class="sublabel">額外練習（不影響打卡）</div>
+    <div class="subacts">
+      <button class="subact" data-mode="spell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>拼字聽寫</button>
+      <button class="subact" data-mode="en"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7V5h16v2"/><path d="M9 19h6"/><path d="M12 5v14"/></svg>中→英回想</button>
+      <button class="subact" data-mode="cloze"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18M3 12h12M3 19h18"/></svg>句子克漏字</button>
+      <button class="subact" id="confBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8l-4 4 4 4"/><path d="M17 8l4 4-4 4"/><path d="M14 4l-4 16"/></svg>易混淆字</button>
+    </div>
+  </section>
+
+  <!-- WORDS -->
+  <section class="screen" id="s-words">
+    <div class="filters" id="filters"></div>
+    <div class="count" id="count"></div>
+    <div class="list" id="list"></div>
+  </section>
+
+  <!-- TEST -->
+  <section class="screen" id="s-test">
+    <div class="sec">
+      <h2 class="serif" style="font-size:26px;font-weight:500;margin:20px 0 4px">程度測驗</h2>
+      <p style="color:var(--ink-soft);font-size:14.5px;margin:0 0 4px">
+        約 15 題，題目難度會隨你的答題自動調整，測出你「開始不會」的等級，再建議從哪裡背起。隨時可重測。</p>
+      <div id="testResult"></div>
+      <div class="cta"><button class="btn primary block" id="testStart">開始測驗</button></div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="screen" id="s-stats">
+    <div class="sec"><h2 class="serif" style="font-size:26px;font-weight:500;margin:20px 0 10px">學習數據</h2></div>
+    <div class="stat-row">
+      <div class="stat"><div class="n" id="stKnown">0</div><div class="l">已掌握</div></div>
+      <div class="stat"><div class="n" id="stStreak">0</div><div class="l">連續天數</div></div>
+      <div class="stat"><div class="n" id="stAcc">–</div><div class="l">總正確率</div></div>
+    </div>
+    <div class="sec"><h3>各等級掌握度</h3><div id="mastery"></div></div>
+    <div class="sec"><h3>近 7 天</h3><div class="week" id="week"></div></div>
+    <div class="sec"><h3>最常答錯</h3><div class="missed" id="missed"></div></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="screen" id="s-set">
+    <div class="sec"><h2 class="serif" style="font-size:26px;font-weight:500;margin:20px 0 12px">設定</h2></div>
+    <div class="set-card">
+      <div class="set-row">
+        <div class="t">學習等級</div>
+        <div class="d">選擇要納入「新字」的 CEFR 等級</div>
+        <div class="lvgrid" id="setLevels"></div>
+      </div>
+      <div class="set-row">
+        <div class="t">每日打卡份量</div>
+        <div class="d">決定每天新字、複習、產出、克漏字四關的份量</div>
+        <div class="steps" id="setPreset"></div>
+      </div>
+      <div class="set-row">
+        <div class="t">深淺色</div><div class="d">目前跟隨系統，可手動固定</div>
+        <div class="steps" id="setTheme" style="margin-top:12px"></div>
+      </div>
+    </div>
+    <div class="set-card" style="margin-top:14px">
+      <div class="set-row">
+        <div class="t">備份與搬家</div>
+        <div class="d">進度只存在這台裝置。換手機或怕遺失，就先備份起來。</div>
+        <div class="steps" style="margin-top:12px">
+          <button class="step" id="btnCopy">複製備份</button>
+          <button class="step" id="btnExport">下載檔案</button>
+          <button class="step" id="btnImport">貼上還原</button>
+        </div>
+        <textarea class="io-area" id="ioArea" spellcheck="false"></textarea>
+        <div class="d" style="margin-top:12px;line-height:1.6">
+          <b>換手機怎麼搬：</b>舊機按「複製備份」→ 貼到記事本或雲端硬碟存起來。新機打開 App → 到這裡按「貼上還原」→ 貼進去 → 再按一次「貼上還原」就完成。</div>
+      </div>
+      <div class="set-row">
+        <div class="t danger">重設所有進度</div>
+        <div class="d">清空學習記錄與設定，無法復原</div>
+        <div class="steps" style="margin-top:12px"><button class="step danger" id="btnReset" style="flex:0 0 auto;padding:10px 18px">重設</button></div>
+      </div>
+    </div>
+    <footer>Lexi · 全離線 · 資料存在本機 · 樣本字庫</footer>
+  </section>
+
+</div>
+
+<!-- bottom nav -->
+<nav><div class="nav-in" id="nav">
+  <button class="tab on" data-s="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>今日</button>
+  <button class="tab" data-s="words"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2z"/><path d="M4 19a2 2 0 0 1 2-2h13"/></svg>字表</button>
+  <button class="tab" data-s="test"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>測驗</button>
+  <button class="tab" data-s="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>數據</button>
+  <button class="tab" data-s="set"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 0 1-4 0v-.2A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H1a2 2 0 0 1 0-4h.2A1.6 1.6 0 0 0 2.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9 2.6h.1A1.6 1.6 0 0 0 10 1.2V1a2 2 0 0 1 4 0v.2a1.6 1.6 0 0 0 2.7 1.1 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7h.2a2 2 0 0 1 0 4h-.2a1.6 1.6 0 0 0-1.1 1z"/></svg>設定</button>
+</div></nav>
+
+<!-- study/test overlay -->
+<div class="overlay" id="ov">
+  <div class="ov-head">
+    <button class="close" id="ovClose">✕</button>
+    <div class="progress"><i id="ovProg"></i></div>
+    <div class="pc" id="ovPc"></div>
+  </div>
+  <div class="ov-body" id="ovBody"></div>
+</div>
+
+<script>
+const WORDS = [{"id": 0, "word": "apple", "pos": "n.", "phon": "/ˈæp.əl/", "mean": "蘋果", "level": "A1", "ex": "I eat an apple every morning."}, {"id": 1, "word": "water", "pos": "n.", "phon": "/ˈwɔː.tər/", "mean": "水", "level": "A1", "ex": "Please drink some water."}, {"id": 2, "word": "happy", "pos": "adj.", "phon": "/ˈhæp.i/", "mean": "快樂的；開心的", "level": "A1", "ex": "She looks very happy today."}, {"id": 3, "word": "big", "pos": "adj.", "phon": "/bɪɡ/", "mean": "大的", "level": "A1", "ex": "They live in a big house."}, {"id": 4, "word": "friend", "pos": "n.", "phon": "/frend/", "mean": "朋友", "level": "A1", "ex": "He is my best friend."}, {"id": 5, "word": "travel", "pos": "v.", "phon": "/ˈtræv.əl/", "mean": "旅行", "level": "A2", "ex": "I love to travel in summer."}, {"id": 6, "word": "weather", "pos": "n.", "phon": "/ˈweð.ər/", "mean": "天氣", "level": "A2", "ex": "The weather is nice today."}, {"id": 7, "word": "decide", "pos": "v.", "phon": "/dɪˈsaɪd/", "mean": "決定", "level": "A2", "ex": "You need to decide soon."}, {"id": 8, "word": "quiet", "pos": "adj.", "phon": "/ˈkwaɪ.ət/", "mean": "安靜的", "level": "A2", "ex": "Please keep quiet here."}, {"id": 9, "word": "improve", "pos": "v.", "phon": "/ɪmˈpruːv/", "mean": "改善；進步", "level": "A2", "ex": "I want to improve my English."}, {"id": 10, "word": "environment", "pos": "n.", "phon": "/ɪnˈvaɪ.rən.mənt/", "mean": "環境", "level": "B1", "ex": "We must protect the environment."}, {"id": 11, "word": "achieve", "pos": "v.", "phon": "/əˈtʃiːv/", "mean": "達成；實現", "level": "B1", "ex": "You can achieve your goal."}, {"id": 12, "word": "confident", "pos": "adj.", "phon": "/ˈkɒn.fɪ.dənt/", "mean": "有自信的", "level": "B1", "ex": "He feels confident about the exam."}, {"id": 13, "word": "reduce", "pos": "v.", "phon": "/rɪˈdʒuːs/", "mean": "減少", "level": "B1", "ex": "We should reduce plastic waste."}, {"id": 14, "word": "suggest", "pos": "v.", "phon": "/səˈdʒest/", "mean": "建議", "level": "B1", "ex": "Can you suggest a good book?"}, {"id": 15, "word": "sustainable", "pos": "adj.", "phon": "/səˈsteɪ.nə.bəl/", "mean": "永續的；可持續的", "level": "B2", "ex": "We need a sustainable energy plan."}, {"id": 16, "word": "serene", "pos": "adj.", "phon": "/səˈriːn/", "mean": "平靜的；安詳的", "level": "B2", "ex": "The lake was calm and serene."}, {"id": 17, "word": "efficient", "pos": "adj.", "phon": "/ɪˈfɪʃ.ənt/", "mean": "有效率的", "level": "B2", "ex": "This is a very efficient method."}, {"id": 18, "word": "consequence", "pos": "n.", "phon": "/ˈkɒn.sɪ.kwəns/", "mean": "後果；結果", "level": "B2", "ex": "Every choice has a consequence."}, {"id": 19, "word": "reluctant", "pos": "adj.", "phon": "/rɪˈlʌk.tənt/", "mean": "不情願的", "level": "B2", "ex": "He was reluctant to leave."}, {"id": 20, "word": "ambiguous", "pos": "adj.", "phon": "/æmˈbɪɡ.ju.əs/", "mean": "模稜兩可的", "level": "C1", "ex": "Her answer was ambiguous."}, {"id": 21, "word": "inevitable", "pos": "adj.", "phon": "/ɪˈnev.ɪ.tə.bəl/", "mean": "無可避免的", "level": "C1", "ex": "Change is inevitable."}, {"id": 22, "word": "profound", "pos": "adj.", "phon": "/prəˈfaʊnd/", "mean": "深刻的；深遠的", "level": "C1", "ex": "It had a profound impact on me."}, {"id": 23, "word": "scrutiny", "pos": "n.", "phon": "/ˈskruː.tɪ.ni/", "mean": "仔細審查", "level": "C1", "ex": "The plan is under close scrutiny."}, {"id": 24, "word": "meticulous", "pos": "adj.", "phon": "/məˈtɪk.jə.ləs/", "mean": "一絲不苟的", "level": "C1", "ex": "She is meticulous about details."}, {"id": 25, "word": "ephemeral", "pos": "adj.", "phon": "/ɪˈfem.ər.əl/", "mean": "短暫的", "level": "C2", "ex": "Fame can be ephemeral."}, {"id": 26, "word": "ubiquitous", "pos": "adj.", "phon": "/juːˈbɪk.wɪ.təs/", "mean": "無所不在的", "level": "C2", "ex": "Smartphones are now ubiquitous."}, {"id": 27, "word": "paradigm", "pos": "n.", "phon": "/ˈpær.ə.daɪm/", "mean": "典範；範式", "level": "C2", "ex": "This marks a new paradigm."}, {"id": 28, "word": "esoteric", "pos": "adj.", "phon": "/ˌes.əˈter.ɪk/", "mean": "深奧的；難懂的", "level": "C2", "ex": "The topic is quite esoteric."}, {"id": 29, "word": "quintessential", "pos": "adj.", "phon": "/ˌkwɪn.tɪˈsen.ʃəl/", "mean": "典型的；精髓的", "level": "C2", "ex": "He is the quintessential gentleman."}];
+const CONFUSABLES = [{"a": {"word": "affect", "phon": "/əˈfekt/", "pos": "v.", "mean": "影響（動詞）"}, "b": {"word": "effect", "phon": "/ɪˈfekt/", "pos": "n.", "mean": "效果、影響（名詞）"}}, {"a": {"word": "principal", "phon": "/ˈprɪn.sə.pəl/", "pos": "n./adj.", "mean": "校長；主要的"}, "b": {"word": "principle", "phon": "/ˈprɪn.sə.pəl/", "pos": "n.", "mean": "原則"}}, {"a": {"word": "accept", "phon": "/əkˈsept/", "pos": "v.", "mean": "接受"}, "b": {"word": "except", "phon": "/ɪkˈsept/", "pos": "prep.", "mean": "除了…之外"}}, {"a": {"word": "advice", "phon": "/ədˈvaɪs/", "pos": "n.", "mean": "建議（名詞）"}, "b": {"word": "advise", "phon": "/ədˈvaɪz/", "pos": "v.", "mean": "建議（動詞）"}}, {"a": {"word": "lose", "phon": "/luːz/", "pos": "v.", "mean": "失去；輸"}, "b": {"word": "loose", "phon": "/luːs/", "pos": "adj.", "mean": "鬆的"}}, {"a": {"word": "desert", "phon": "/ˈdez.ət/", "pos": "n.", "mean": "沙漠"}, "b": {"word": "dessert", "phon": "/dɪˈzɜːt/", "pos": "n.", "mean": "甜點"}}, {"a": {"word": "stationary", "phon": "/ˈsteɪ.ʃən.ər.i/", "pos": "adj.", "mean": "靜止的"}, "b": {"word": "stationery", "phon": "/ˈsteɪ.ʃən.ər.i/", "pos": "n.", "mean": "文具"}}, {"a": {"word": "complement", "phon": "/ˈkɒm.plɪ.mənt/", "pos": "v./n.", "mean": "補足；補充物"}, "b": {"word": "compliment", "phon": "/ˈkɒm.plɪ.mənt/", "pos": "n./v.", "mean": "稱讚"}}];
+const LEVELS=["A1","A2","B1","B2","C1","C2"];
+const DAY=86400000;
+const WIDX=Object.fromEntries(WORDS.map(w=>[w.id,w]));
+const $=id=>document.getElementById(id);
+const rand=()=>Math.random();
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=(rand()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];}return a;};
+const cssvar=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const lvColor=l=>cssvar('--lv-'+l);
+
+/* ---------- storage ---------- */
+function defaults(){return {v:1,words:{},overrides:{},theme:null,
+  settings:{levels:["A1","A2","B1","B2","C1","C2"],newPerDay:5,preset:'light'},
+  stats:{streak:0,lastDay:null,history:{},newToday:{day:null,count:0},answered:0,right:0,testLevel:null,
+    checkStreak:0,lastCheckDay:null,daily:{day:null,new:false,review:false,prod:false,cloze:false,done:false}}};}
+let DB=defaults();
+function load(){try{const r=localStorage.getItem('lexi.v1');if(r){const d=JSON.parse(r);DB=Object.assign(defaults(),d);
+  DB.settings=Object.assign(defaults().settings,d.settings||{});DB.stats=Object.assign(defaults().stats,d.stats||{});
+  DB.words=d.words||{};DB.overrides=d.overrides||{};}}catch(e){}}
+function save(){try{localStorage.setItem('lexi.v1',JSON.stringify(DB));}catch(e){}}
+load();
+
+/* ---------- date / streak ---------- */
+function dstr(d){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+function today(){return dstr(new Date());}
+function newDone(){const t=today();if(DB.stats.newToday.day!==t)DB.stats.newToday={day:t,count:0};return DB.stats.newToday.count;}
+function incNew(){const t=today();if(DB.stats.newToday.day!==t)DB.stats.newToday={day:t,count:0};DB.stats.newToday.count++;}
+function markStudied(){const t=today();DB.stats.history[t]=(DB.stats.history[t]||0)+1;
+  if(DB.stats.lastDay!==t){const ys=dstr(new Date(Date.now()-DAY));DB.stats.streak=(DB.stats.lastDay===ys)?DB.stats.streak+1:1;DB.stats.lastDay=t;}}
+function lvlOf(w){return DB.overrides[w.id]||w.level;}
+
+/* ---------- SM-2 scheduling ---------- */
+function schedule(st,q){ // q: 0 again, 1 guessed-correct, 2 good
+  st.seen=(st.seen||0)+1;
+  if(q===0){st.reps=0;st.lapses=(st.lapses||0)+1;st.interval=0;st.status='learning';
+    st.due=Date.now()+60000;st.wrong=(st.wrong||0)+1;}
+  else if(q===1){st.reps=0;st.interval=0;st.status='learning';st.due=Date.now()+600000;
+    st.correct=(st.correct||0)+1;st.guessed=(st.guessed||0)+1;st.ease=Math.max(1.3,(st.ease||2.5)-0.15);}
+  else{st.correct=(st.correct||0)+1;st.reps=(st.reps||0)+1;st.ease=Math.min(2.8,(st.ease||2.5)+0.05);
+    if(st.reps===1)st.interval=1;else if(st.reps===2)st.interval=6;else st.interval=Math.round(st.interval*st.ease);
+    st.status=st.interval>=21?'known':'review';st.due=Date.now()+st.interval*DAY;}
+  return st;
+}
+
+/* ---------- speech ---------- */
+let VOICES=[];
+function loadVoices(){VOICES=window.speechSynthesis?window.speechSynthesis.getVoices():[];}
+if('speechSynthesis' in window){loadVoices();window.speechSynthesis.onvoiceschanged=loadVoices;}
+function pickVoice(){if(!VOICES.length)loadVoices();
+  return VOICES.find(v=>/en[-_]US/i.test(v.lang)&&/female|samantha|karen|moira|zira|ava/i.test(v.name))
+    ||VOICES.find(v=>/en[-_]US/i.test(v.lang))||VOICES.find(v=>/^en/i.test(v.lang))||null;}
+let curSpk=null;
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('此瀏覽器不支援語音，換 Safari/Chrome 試試');return;}
+  window.speechSynthesis.cancel();
+  if(curSpk)curSpk.classList.remove('speaking');
+  const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=0.9;
+  const v=pickVoice();if(v)u.voice=v;
+  if(btn){curSpk=btn;btn.classList.add('speaking');
+    u.onend=u.onerror=()=>{btn.classList.remove('speaking');if(curSpk===btn)curSpk=null;};}
+  window.speechSynthesis.speak(u);
+}
+const spkSVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
+const playSVG='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+
+/* ---------- distractors ---------- */
+function distractors(w,field,n){
+  let pool=WORDS.filter(x=>x.id!==w.id&&x.level===w.level);
+  let arr=shuffle(pool).slice(0,n).map(x=>x[field]);
+  if(arr.length<n){for(const m of shuffle(WORDS.filter(x=>x.id!==w.id)).map(x=>x[field])){
+    if(arr.length>=n)break;if(!arr.includes(m)&&m!==w[field])arr.push(m);}}
+  return arr;
+}
+function revealHTML(w){
+  return `<div class="r1"><div><div class="rw serif">${w.word}</div><div class="rp">${w.phon} · <span class="pos">${w.pos}</span></div></div>
+    <button class="spk-sm" onclick="speak('${w.word.replace(/'/g,"")}',this)">${spkSVG}</button></div>
+    <div class="rm">${w.mean}</div><div class="rex">${w.ex}</div>`;
+}
+
+/* ================= SESSION ================= */
+let SES=null;
+function startSession(queue,label){
+  if(!queue.length){toast('目前沒有要練習的字');return;}
+  SES={queue:queue.slice(),answered:0,right:0,total:queue.length,seen0:new Set(queue),label:label||'今日學習'};
+  $('ov').classList.add('active');nextCard();
+}
+const PRESETS={light:{new:5,review:20,prod:6,cloze:6},standard:{new:8,review:30,prod:8,cloze:8},solid:{new:12,review:40,prod:10,cloze:10}};
+function preset(){return PRESETS[DB.settings.preset||'light'];}
+function ensureDaily(){const t=today();if(!DB.stats.daily||DB.stats.daily.day!==t)DB.stats.daily={day:t,new:false,review:false,prod:false,cloze:false,done:false};}
+function poolNew(){return WORDS.filter(w=>!DB.words[w.id]&&DB.settings.levels.includes(lvlOf(w))).slice(0,preset().new);}
+function poolReview(){const now=Date.now();return WORDS.filter(w=>{const s=DB.words[w.id];return s&&s.due&&s.due<=now;}).slice(0,preset().review);}
+function poolSeen(){return WORDS.filter(w=>DB.words[w.id]&&DB.words[w.id].seen);}
+function poolProd(){return shuffle(poolSeen()).slice(0,preset().prod);}
+function poolCloze(){return shuffle(poolSeen().filter(w=>w.ex.toLowerCase().includes(w.word.toLowerCase()))).slice(0,preset().cloze);}
+function emptyMsg(k){return k==='review'?'今天沒有到期的字，這關直接過 ✓':'目前還沒有可練的字，先做前面的關卡 ✓';}
+function startQuest(key){
+  ensureDaily();let items=[],label='';
+  if(key==='new'){items=poolNew().map(w=>w.id);label='新字關';}
+  else if(key==='review'){items=poolReview().map(w=>w.id);label='複習關';}
+  else if(key==='prod'){items=poolProd().map(w=>({id:w.id,forceType:rand()<0.5?'recall':'spell'}));label='產出關';}
+  else if(key==='cloze'){items=poolCloze().map(w=>({id:w.id,forceType:'cloze'}));label='克漏字關';}
+  if(!items.length){completeQuest(key);toast(emptyMsg(key));renderToday();return;}
+  SES={queue:items.slice(),answered:0,right:0,total:items.length,label,questKey:key,onePass:true};
+  $('ov').classList.add('active');nextCard();
+}
+function completeQuest(key){ensureDaily();if(DB.stats.daily[key]){return;}DB.stats.daily[key]=true;
+  const d=DB.stats.daily;if(d.new&&d.review&&d.prod&&d.cloze&&!d.done){d.done=true;bumpCheck();}save();}
+function bumpCheck(){const t=today();if(DB.stats.lastCheckDay===t)return;
+  const y=dstr(new Date(Date.now()-DAY));DB.stats.checkStreak=(DB.stats.lastCheckDay===y)?(DB.stats.checkStreak||0)+1:1;DB.stats.lastCheckDay=t;}
+function buildModeQueue(mode){ // fixed-type practice on a sample of enabled words
+  const en=DB.settings.levels;
+  let pool=WORDS.filter(w=>en.includes(lvlOf(w)));
+  if(mode==='cloze')pool=pool.filter(w=>w.ex.toLowerCase().includes(w.word.toLowerCase()));
+  return shuffle(pool).slice(0,12).map(w=>({id:w.id,forceType:mode}));
+}
+function pickType(st){
+  const r=st?(st.reps||0):0;
+  if(!st||st.status==='new')return 'zh';        // 新字：選中文（建立印象）
+  if(r<=1)return rand()<0.5?'en':'cloze';        // 再認
+  if(r<=2)return rand()<0.5?'recall':'cloze';    // 過渡
+  return rand()<0.5?'spell':'recall';            // 成熟：只出產出題（用打的）
+}
+function nextCard(){
+  if(!SES.queue.length){endSession();return;}
+  const item=SES.queue[0];const id=(typeof item==='object')?item.id:item;
+  const forced=(typeof item==='object')?item.forceType:null;
+  const w=WIDX[id];const st=DB.words[id];
+  let type=forced||pickType(st);
+  if(type==='cloze'&&!w.ex.toLowerCase().includes(w.word.toLowerCase()))type='en';
+  SES.curType=type;
+  updateProg();$('ovBody').removeAttribute('data-done');
+  if(type==='zh')renderMC(w,`<div class="q-label">選出正確的中文意思</div>
+      <div class="q-word-row"><div><div class="q-word serif">${w.word}</div><div class="q-phon">${w.phon}</div></div>
+      <button class="spk mid" onclick="speak('${w.word}',this)">${spkSVG}</button></div>`,
+      w.mean,distractors(w,'mean',3),false);
+  else if(type==='en')renderMC(w,`<div class="q-label">選出對應的英文單字</div>
+      <div class="q-word serif" style="font-size:34px">${w.mean}</div>`,
+      w.word,distractors(w,'word',3),true);
+  else if(type==='cloze'){const re=new RegExp(w.word,'i');const s=w.ex.replace(re,'<u>?</u>');
+    renderMC(w,`<div class="q-label">選出填入空格的字</div><div class="q-cloze serif">${s}</div>`,
+      w.word,distractors(w,'word',3),true);}
+  else if(type==='spell')renderSpell(w);
+  else renderRecall(w);
+}
+function renderMC(w,promptHTML,correct,dist,serifOpt){
+  const body=$('ovBody');
+  const opts=shuffle(dist.concat([correct]));
+  body.innerHTML=`<div class="q-prompt">${promptHTML}</div>
+    <div class="opts">${opts.map(o=>`<button class="opt${serifOpt?' serif':''}">${o}</button>`).join('')}</div>
+    <div class="afterbar" id="afterbar"></div>`;
+  const btns=[...body.querySelectorAll('.opt')];
+  btns.forEach(b=>b.onclick=()=>{
+    if(body.dataset.done)return;body.dataset.done='1';
+    const ok=b.textContent===correct;
+    btns.forEach(x=>{x.disabled=true;if(x.textContent===correct)x.classList.add('correct');});
+    if(ok){b.classList.add('correct');afterCorrect(w);}else{b.classList.add('wrong');afterWrong(w);}
+  });
+}
+function hintText(word,lv){const n=word.length;if(lv>=3)return word.split('').join(' ');
+  const reveal=lv===1?1:Math.ceil(n/2);let o=[];for(let i=0;i<n;i++)o.push(i<reveal?word[i]:'_');return o.join(' ');}
+function attachHint(word){let lv=0;const btn=$('hintBtn'),box=$('hintBox');const labels=['看提示','多給一點','看答案'];
+  btn.textContent=labels[0];
+  btn.onclick=()=>{lv=Math.min(3,lv+1);box.textContent=hintText(word,lv);
+    if(lv>=3){btn.textContent='已顯示答案';btn.disabled=true;}else btn.textContent=labels[lv];};}
+function renderSpell(w){
+  const body=$('ovBody');
+  body.innerHTML=`<div class="q-prompt"><div class="q-label">聽發音，把單字拼出來</div>
+      <button class="spk big" id="sPlay">${spkSVG}</button>
+      <input class="spell-in" id="sIn" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="輸入單字">
+      <div class="hintline">${w.mean}</div></div>
+    <div class="afterbar" id="afterbar">
+      <button class="btn ghost block" id="hintBtn" style="margin-bottom:10px"></button>
+      <div class="hintbox" id="hintBox"></div>
+      <button class="btn primary block" id="sChk">檢查</button></div>`;
+  const play=()=>speak(w.word,$('sPlay'));setTimeout(play,250);
+  $('sPlay').onclick=play;attachHint(w.word);
+  const chk=()=>{if(body.dataset.done)return;body.dataset.done='1';
+    const val=($('sIn').value||'').trim().toLowerCase();const ok=val===w.word.toLowerCase();
+    $('sIn').style.borderColor=ok?'var(--ok)':'var(--bad)';$('sIn').disabled=true;
+    if(ok)afterCorrect(w);else afterWrong(w);};
+  $('sChk').onclick=chk;
+  $('sIn').addEventListener('keydown',e=>{if(e.key==='Enter')chk();});
+}
+function renderRecall(w){
+  const body=$('ovBody');
+  const hasEx=w.ex.toLowerCase().includes(w.word.toLowerCase());
+  const sent=hasEx?w.ex.replace(new RegExp(w.word,'i'),'____'):'';
+  body.innerHTML=`<div class="q-prompt"><div class="q-label">看意思，把英文單字拼出來</div>
+      <div class="q-word serif" style="font-size:30px">${w.mean}</div>
+      ${hasEx?`<div class="q-cloze serif" style="font-size:17px;margin-top:12px;color:var(--ink-soft)">${sent}</div>`:''}
+      <input class="spell-in" id="sIn" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="輸入單字">
+      <div style="text-align:center;margin-top:12px"><button class="spk-sm" id="rHint" style="display:inline-grid">${spkSVG}</button></div></div>
+    <div class="afterbar" id="afterbar">
+      <button class="btn ghost block" id="hintBtn" style="margin-bottom:10px"></button>
+      <div class="hintbox" id="hintBox"></div>
+      <button class="btn primary block" id="sChk">檢查</button></div>`;
+  $('rHint').onclick=()=>speak(w.word,$('rHint'));attachHint(w.word);
+  const chk=()=>{if(body.dataset.done)return;body.dataset.done='1';
+    const val=($('sIn').value||'').trim().toLowerCase();const ok=val===w.word.toLowerCase();
+    $('sIn').style.borderColor=ok?'var(--ok)':'var(--bad)';$('sIn').disabled=true;
+    if(ok)afterCorrect(w);else afterWrong(w);};
+  $('sChk').onclick=chk;$('sIn').addEventListener('keydown',e=>{if(e.key==='Enter')chk();});
+  setTimeout(()=>{try{$('sIn').focus();}catch(e){}},200);
+}
+function afterCorrect(w){
+  const bar=$('afterbar');
+  bar.innerHTML=`<div class="reveal">${revealHTML(w)}</div>
+    <div class="afterbtns">
+      <button class="btn ghost" id="bGuess">我是猜的，還沒記起來</button>
+      <button class="btn primary" id="bGood">記起來了 →</button></div>`;
+  $('bGood').onclick=()=>grade(w,2);
+  $('bGuess').onclick=()=>grade(w,1);
+  bar.scrollIntoView({behavior:'smooth',block:'end'});
+}
+function afterWrong(w){
+  const bar=$('afterbar');
+  bar.innerHTML=`<div class="reveal wrong-note">${revealHTML(w)}</div>
+    <div class="afterbtns"><button class="btn primary" id="bCont">繼續 →</button></div>`;
+  $('bCont').onclick=()=>grade(w,0);
+  bar.scrollIntoView({behavior:'smooth',block:'end'});
+}
+function grade(w,q){
+  const type=SES?SES.curType:'zh';
+  const isProd=(type==='spell'||type==='recall');   // 用打的 = 產出
+  const isNew=!DB.words[w.id];
+  const st=DB.words[w.id]||(DB.words[w.id]={ease:2.5,interval:0,reps:0,status:'new',seen:0,correct:0,wrong:0});
+  if(q===2&&isProd)st.prod=true;                     // 通過產出題才記一筆
+  schedule(st,q);
+  if(st.status==='known'&&!st.prod)st.status='review'; // 只認得、還沒產出過 → 不算已掌握
+  if(isNew)incNew();
+  DB.stats.answered++;if(q>=1)DB.stats.right++;
+  SES.answered++;if(q>=1)SES.right++;
+  markStudied();save();
+  const item=SES.queue.shift();
+  if(q<2&&!SES.onePass){const pos=Math.min(SES.queue.length,3);SES.queue.splice(pos,0,item);}
+  nextCard();
+}
+function updateProg(){
+  const totalGuess=SES.answered+SES.queue.length;
+  const pc=totalGuess?Math.round(SES.answered/totalGuess*100):0;
+  $('ovProg').style.width=pc+'%';$('ovPc').textContent=SES.answered+'/'+totalGuess;
+}
+function endSession(){
+  const qk=SES.questKey;if(qk)completeQuest(qk);
+  const acc=SES.answered?Math.round(SES.right/SES.answered*100):0;
+  const done=DB.stats.daily&&DB.stats.daily.done;
+  $('ovProg').style.width='100%';$('ovPc').textContent='';
+  $('ovBody').innerHTML=`<div class="result">
+    <div class="big serif">${SES.answered}</div>
+    <h3 class="serif">${SES.label} 完成</h3>
+    ${done?`<p style="color:var(--ok);font-weight:700">🎉 今日打卡完成！連續 ${DB.stats.checkStreak} 天</p>`:''}
+    <div class="res-stats">
+      <div class="s"><div class="n serif">${SES.right}</div><div class="l">答對</div></div>
+      <div class="s"><div class="n serif">${acc}%</div><div class="l">正確率</div></div>
+      <div class="s"><div class="n serif">${DB.stats.checkStreak||0}</div><div class="l">打卡連續</div></div></div>
+    <button class="btn primary block" onclick="closeOv()">回今日</button></div>`;
+  SES=null;
+}
+function closeOv(){$('ov').classList.remove('active');SES=null;window.speechSynthesis&&speechSynthesis.cancel();renderToday();renderStats();}
+$('ovClose').onclick=()=>{if(SES&&SES.answered>0&&SES.queue.length){if(!confirm('離開這次練習？進度已存。'))return;}closeOv();};
+
+/* ================= TEST ================= */
+let TEST=null;
+function startTest(){
+  TEST={ability:2.0,step:1.2,asked:0,MAX:15,used:new Set()};
+  $('ov').classList.add('active');testNext();
+}
+function testNext(){
+  if(TEST.asked>=TEST.MAX){testDone();return;}
+  const lv=LEVELS[clamp(Math.round(TEST.ability),0,5)];
+  let pool=WORDS.filter(w=>w.level===lv&&!TEST.used.has(w.id));
+  if(!pool.length)pool=WORDS.filter(w=>w.level===lv);
+  const w=shuffle(pool)[0];TEST.used.add(w.id);
+  const pc=Math.round(TEST.asked/TEST.MAX*100);
+  $('ovProg').style.width=pc+'%';$('ovPc').textContent=(TEST.asked+1)+'/'+TEST.MAX;
+  $('ovBody').removeAttribute('data-done');
+  const body=$('ovBody');const opts=shuffle(distractors(w,'mean',3).concat([w.mean]));
+  body.innerHTML=`<div class="q-prompt"><div class="q-label">選出正確的中文意思</div>
+      <div class="q-word-row"><div><div class="q-word serif">${w.word}</div><div class="q-phon">${w.phon}</div></div>
+      <button class="spk mid" onclick="speak('${w.word}',this)">${spkSVG}</button></div></div>
+    <div class="opts">${opts.map(o=>`<button class="opt">${o}</button>`).join('')}</div>
+    <button class="btn ghost block" id="tSkip" style="margin-top:14px">🤔 不確定 / 用猜的</button>`;
+  const adv=(dAbility,delay)=>{TEST.ability=clamp(TEST.ability+dAbility,-0.5,5.5);
+    TEST.step=Math.max(0.3,TEST.step*0.8);TEST.asked++;setTimeout(testNext,delay);};
+  [...body.querySelectorAll('.opt')].forEach(b=>b.onclick=()=>{
+    if(body.dataset.done)return;body.dataset.done='1';
+    const ok=b.textContent===w.mean;
+    body.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.textContent===w.mean)x.classList.add('correct');});
+    if(!ok)b.classList.add('wrong');
+    adv(ok?TEST.step:-TEST.step, ok?450:900);
+  });
+  $('tSkip').onclick=()=>{if(body.dataset.done)return;body.dataset.done='1';
+    body.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.textContent===w.mean)x.classList.add('correct');});
+    adv(-TEST.step*0.6, 800); // 誠實承認不會 → 不灌水
+  };
+}
+function testDone(){
+  const est=clamp(Math.round(TEST.ability),0,5);const lv=LEVELS[est];
+  DB.stats.testLevel=lv;save();
+  const lo=LEVELS[Math.max(0,est-1)];
+  $('ovProg').style.width='100%';$('ovPc').textContent='';
+  $('ovBody').innerHTML=`<div class="result">
+    <div class="big serif">${lv}</div>
+    <h3 class="serif">你的程度大約落在 ${lv}</h3>
+    <p>建議把學習等級設在 <b>${lo}–${lv}</b>，先鞏固再往上。</p>
+    <div style="margin-top:26px;display:flex;flex-direction:column;gap:10px">
+      <button class="btn primary block" id="applyLv">套用建議等級（${lo}–${lv}）</button>
+      <button class="btn ghost block" onclick="closeOvTest()">先不套用</button>
+      <button class="btn ghost block" onclick="startTest()">重新測驗</button></div></div>`;
+  $('applyLv').onclick=()=>{DB.settings.levels=LEVELS.slice(Math.max(0,est-1),est+1);save();renderSettings();closeOvTest();toast('已套用建議等級');};
+  TEST=null;
+}
+function closeOvTest(){$('ov').classList.remove('active');renderTestScreen();renderSettings();}
+
+/* ================= CONFUSABLES ================= */
+let CONF=null;
+function startConf(){
+  const qs=[];CONFUSABLES.forEach((p,i)=>{qs.push({p:i,side:'a'});qs.push({p:i,side:'b'});});
+  CONF={q:shuffle(qs),i:0,right:0};
+  $('ov').classList.add('active');confNext();
+}
+function confNext(){
+  if(CONF.i>=CONF.q.length){confDone();return;}
+  const {p,side}=CONF.q[CONF.i];const pair=CONFUSABLES[p];
+  const target=pair[side];const other=pair[side==='a'?'b':'a'];
+  $('ovProg').style.width=Math.round(CONF.i/CONF.q.length*100)+'%';$('ovPc').textContent=(CONF.i+1)+'/'+CONF.q.length;
+  const body=$('ovBody');body.removeAttribute('data-done');
+  const opts=shuffle([target.word,other.word]);
+  body.innerHTML=`<div class="q-prompt"><div class="q-label">哪個字是這個意思？</div>
+      <div class="q-word serif" style="font-size:30px">${target.mean}</div>
+      <div class="q-phon">${target.phon}</div></div>
+    <div class="opts">${opts.map(o=>`<button class="opt serif">${o}</button>`).join('')}</div>
+    <div class="afterbar" id="afterbar"></div>`;
+  [...body.querySelectorAll('.opt')].forEach(b=>b.onclick=()=>{
+    if(body.dataset.done)return;body.dataset.done='1';
+    const ok=b.textContent===target.word;
+    body.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.textContent===target.word)x.classList.add('correct');});
+    if(ok)CONF.right++;else b.classList.add('wrong');
+    $('afterbar').innerHTML=`<div class="reveal"><div class="rm"><b>${target.word}</b> ${target.mean}　·　<b>${other.word}</b> ${other.mean}</div></div>
+      <div class="afterbtns"><button class="btn primary" id="cN">繼續 →</button></div>`;
+    $('cN').onclick=()=>{CONF.i++;confNext();};
+    $('afterbar').scrollIntoView({behavior:'smooth',block:'end'});
+  });
+}
+function confDone(){
+  $('ovProg').style.width='100%';$('ovPc').textContent='';
+  $('ovBody').innerHTML=`<div class="result"><div class="big serif">${CONF.right}/${CONF.q.length}</div>
+    <h3 class="serif">易混淆字 完成</h3><p>常錯的字之後多出現幾次就記住了。</p>
+    <button class="btn primary block" style="margin-top:24px" onclick="closeOv()">回今日</button></div>`;
+  CONF=null;
+}
+
+/* ================= RENDER: TODAY ================= */
+function renderToday(){
+  ensureDaily();
+  const d=DB.stats.daily;
+  const h=new Date().getHours();
+  $('greet').textContent=h<12?'早安':h<18?'午安':'晚安';
+  $('streakLine').innerHTML=(DB.stats.checkStreak>0)?`連續打卡 <b>${DB.stats.checkStreak}</b> 天`:'完成今天四關，開始你的連續紀錄';
+  const quests=[
+    {k:'new',icon:'🌱',name:'新字關',pool:poolNew()},
+    {k:'review',icon:'🔁',name:'複習關',pool:poolReview()},
+    {k:'prod',icon:'✍️',name:'產出關',pool:poolProd()},
+    {k:'cloze',icon:'🧩',name:'克漏字關',pool:poolCloze()},
+  ];
+  const doneN=quests.filter(q=>d[q.k]).length;
+  const rows=quests.map(q=>{const isDone=d[q.k];const n=q.pool.length;
+    const sub=isDone?'完成':(n?`${n} 個字`:'點一下過關');
+    return `<button class="quest ${isDone?'done':''}" data-k="${q.k}">
+      <span class="qi">${isDone?'✓':q.icon}</span>
+      <span class="qb"><span class="qn">${q.name}</span><span class="qs">${sub}</span></span>
+      <span class="qarrow">›</span></button>`;}).join('');
+  const nextKey=(quests.find(q=>!d[q.k])||{}).k;
+  const cta=d.done
+    ? `<div class="stamp">今日打卡完成 🎉<div class="stampsub">連續 ${DB.stats.checkStreak||0} 天 · 明天再來</div></div>`
+    : `<button class="btn primary block" id="contBtn">繼續打卡（${doneN}/4）→</button>`;
+  $('checkin').innerHTML=`<div class="ci-head"><div class="ci-title serif">今日打卡</div><div class="ci-prog">${doneN}/4 關</div></div>
+    <div class="quests">${rows}</div><div style="margin-top:14px">${cta}</div>`;
+  $('checkin').querySelectorAll('.quest').forEach(b=>b.onclick=()=>startQuest(b.dataset.k));
+  const cb=$('contBtn');if(cb)cb.onclick=()=>startQuest(nextKey);
+}
+
+/* ================= RENDER: WORDS ================= */
+let wfilter='all';
+function renderFilters(){
+  const f=$('filters');
+  f.innerHTML=[`<button class="chip" data-f="all" aria-pressed="${wfilter==='all'}">全部</button>`]
+    .concat(LEVELS.map(l=>`<button class="chip lvl" data-f="${l}" aria-pressed="${wfilter===l}" style="--c:${lvColor(l)}">${l}</button>`)).join('');
+  f.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{wfilter=c.dataset.f;renderFilters();renderList();});
+}
+function statusOf(w){const s=DB.words[w.id];return s?s.status:'new';}
+function renderList(){
+  const items=WORDS.filter(w=>wfilter==='all'||lvlOf(w)===wfilter);
+  $('count').textContent=`${items.length} 個字${wfilter==='all'?'':'（'+wfilter+'）'}`;
+  $('list').innerHTML=items.map(w=>{const lv=lvlOf(w);const stt=statusOf(w);
+    return `<div class="card" style="--c:${lvColor(lv)}" data-id="${w.id}">
+      <div class="card-main">
+        <div class="card-body">
+          <div class="row1"><span class="w serif">${w.word}</span><span class="ph">${w.phon}</span></div>
+          <div class="row2"><span class="sdot ${stt}"></span><span class="pill lv-${lv}">${lv}</span><span class="pos">${w.pos}</span></div>
+          <div class="m">${w.mean}</div>
+        </div>
+        <button class="spk-sm" aria-label="播放發音">${spkSVG}</button>
+      </div>
+      <div class="example">
+        <div class="en"><button class="ex-play" aria-label="播放例句">${playSVG}</button><span>${w.ex}</span></div>
+        <div class="lvedit"><div class="lbl">調整此字的等級</div><div class="row">
+          ${LEVELS.map(l=>`<button class="mini" data-l="${l}" aria-pressed="${lv===l}" style="--c:${lvColor(l)}">${l}</button>`).join('')}
+        </div></div>
+      </div></div>`;}).join('');
+  $('list').querySelectorAll('.card').forEach(card=>{
+    const w=WIDX[+card.dataset.id];
+    card.querySelector('.spk-sm').onclick=e=>{e.stopPropagation();speak(w.word,e.currentTarget);};
+    card.querySelector('.ex-play').onclick=e=>{e.stopPropagation();speak(w.ex,null);};
+    card.querySelector('.card-main').onclick=()=>card.classList.toggle('open');
+    card.querySelectorAll('.mini').forEach(m=>m.onclick=e=>{e.stopPropagation();
+      const l=m.dataset.l;if(l===w.level)delete DB.overrides[w.id];else DB.overrides[w.id]=l;
+      save();renderList();renderToday();});
+  });
+}
+
+/* ================= RENDER: TEST screen ================= */
+function renderTestScreen(){
+  const r=$('testResult');
+  r.innerHTML=DB.stats.testLevel?`<div class="empty" style="text-align:left">上次測驗結果：程度約 <b>${DB.stats.testLevel}</b>。可在下方重測。</div>`:'';
+  $('testStart').textContent=DB.stats.testLevel?'重新測驗':'開始測驗';
+}
+
+/* ================= RENDER: STATS ================= */
+function renderStats(){
+  const seen=WORDS.filter(w=>DB.words[w.id]);
+  const known=seen.filter(w=>DB.words[w.id].status==='known').length;
+  $('stKnown').textContent=known;
+  $('stStreak').textContent=DB.stats.checkStreak||0;
+  $('stAcc').textContent=DB.stats.answered?Math.round(DB.stats.right/DB.stats.answered*100)+'%':'–';
+  // mastery per level
+  const m=$('mastery');m.innerHTML=LEVELS.map(l=>{
+    const all=WORDS.filter(w=>lvlOf(w)===l);
+    const good=all.filter(w=>{const s=DB.words[w.id];return s&&(s.status==='known'||s.status==='review');}).length;
+    const pct=all.length?Math.round(good/all.length*100):0;
+    return `<div class="mbar"><span class="lv">${l}</span><div class="track"><i style="width:${pct}%;--c:${lvColor(l)}"></i></div><span class="pct">${good}/${all.length}</span></div>`;
+  }).join('');
+  // week
+  const days=[];for(let i=6;i>=0;i--){const d=new Date(Date.now()-i*DAY);days.push(d);}
+  const max=Math.max(1,...days.map(d=>DB.stats.history[dstr(d)]||0));
+  const wk=['日','一','二','三','四','五','六'];
+  $('week').innerHTML=days.map(d=>{const c=DB.stats.history[dstr(d)]||0;const h=Math.round(c/max*88);
+    return `<div class="d"><div class="bar" style="height:${c?Math.max(4,h):3}px;opacity:${c?0.9:0.25}"></div><div class="lab">${wk[d.getDay()]}</div></div>`;}).join('');
+  // most missed
+  const missed=seen.map(w=>({w,n:(DB.words[w.id].wrong||0)})).filter(x=>x.n>0).sort((a,b)=>b.n-a.n).slice(0,5);
+  $('missed').innerHTML=missed.length?missed.map(x=>`<div class="mi"><span class="w serif">${x.w.word}</span><span class="m" style="flex:1;color:var(--ink-soft);font-size:13px">${x.w.mean}</span><span class="c">錯 ${x.n}</span></div>`).join(''):`<div class="empty">還沒有答錯記錄。</div>`;
+}
+
+/* ================= RENDER: SETTINGS ================= */
+function renderSettings(){
+  $('setLevels').innerHTML=LEVELS.map(l=>`<button class="lvtog" data-l="${l}" aria-pressed="${DB.settings.levels.includes(l)}" style="--c:${lvColor(l)}">${l}</button>`).join('');
+  $('setLevels').querySelectorAll('.lvtog').forEach(b=>b.onclick=()=>{
+    const l=b.dataset.l;const i=DB.settings.levels.indexOf(l);
+    if(i>=0){if(DB.settings.levels.length>1)DB.settings.levels.splice(i,1);}else DB.settings.levels.push(l);
+    save();renderSettings();renderToday();});
+  const P=[['light','輕量'],['standard','標準'],['solid','紮實']];
+  $('setPreset').innerHTML=P.map(([v,t])=>`<button class="step" data-p="${v}" aria-pressed="${(DB.settings.preset||'light')===v}">${t}</button>`).join('');
+  $('setPreset').querySelectorAll('.step').forEach(b=>b.onclick=()=>{DB.settings.preset=b.dataset.p;DB.settings.newPerDay=PRESETS[b.dataset.p].new;save();renderSettings();renderToday();});
+  const th=DB.theme||'auto';
+  $('setTheme').innerHTML=[['auto','跟隨系統'],['light','淺色'],['dark','深色']].map(([v,t])=>`<button class="step" data-t="${v}" aria-pressed="${th===v}">${t}</button>`).join('');
+  $('setTheme').querySelectorAll('.step').forEach(b=>b.onclick=()=>{
+    const v=b.dataset.t;DB.theme=v==='auto'?null:v;
+    if(v==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',v);
+    save();renderSettings();refreshColors();});
+}
+$('btnCopy').onclick=async()=>{const txt=JSON.stringify(DB);
+  try{await navigator.clipboard.writeText(txt);toast('已複製，貼到記事本／雲端硬碟保存');}
+  catch(e){const a=$('ioArea');a.style.display='block';a.value=txt;a.focus();a.select();toast('已顯示備份，長按全選複製');}};
+$('btnExport').onclick=()=>{const a=$('ioArea');a.style.display='block';a.value=JSON.stringify(DB);a.select();
+  try{const blob=new Blob([a.value],{type:'application/json'});const url=URL.createObjectURL(blob);
+    const el=document.createElement('a');el.href=url;el.download='lexi-backup.json';el.click();URL.revokeObjectURL(url);}catch(e){}
+  toast('已匯出（也可複製下方文字保存）');};
+$('btnImport').onclick=()=>{const a=$('ioArea');if(a.style.display!=='block'){a.style.display='block';a.value='';a.placeholder='把備份文字貼在這裡，再按一次「匯入」';a.focus();return;}
+  try{const d=JSON.parse(a.value);DB=Object.assign(defaults(),d);save();load();renderAll();toast('已還原進度');a.style.display='none';}catch(e){toast('格式不對，請貼入完整備份');}};
+$('btnReset').onclick=()=>{if(confirm('確定清空所有學習進度與設定？此動作無法復原。')){DB=defaults();save();renderAll();toast('已重設');}};
+
+/* ================= NAV / THEME / TOAST ================= */
+function show(s){document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id==='s-'+s));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.s===s));
+  window.scrollTo(0,0);
+  if(s==='today')renderToday();if(s==='words'){renderFilters();renderList();}
+  if(s==='test')renderTestScreen();if(s==='stats')renderStats();if(s==='set')renderSettings();}
+$('nav').querySelectorAll('.tab').forEach(t=>t.onclick=()=>show(t.dataset.s));
+
+$('themeBtn').onclick=()=>{const cur=document.documentElement.getAttribute('data-theme');
+  const isDark=cur?cur==='dark':window.matchMedia('(prefers-color-scheme:dark)').matches;
+  const nv=isDark?'light':'dark';DB.theme=nv;document.documentElement.setAttribute('data-theme',nv);save();refreshColors();};
+if(DB.theme)document.documentElement.setAttribute('data-theme',DB.theme);
+function refreshColors(){const a=document.querySelector('.screen.active');if(!a)return;
+  const id=a.id.replace('s-','');if(id==='words'){renderFilters();renderList();}if(id==='stats')renderStats();if(id==='set')renderSettings();}
+
+let toastT=null;
+function toast(msg){let t=$('toast');if(!t){t=document.createElement('div');t.id='toast';
+  t.style.cssText='position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:11px 18px;border-radius:12px;font-size:13.5px;z-index:99;opacity:0;transition:opacity .2s;pointer-events:none;max-width:80%;text-align:center';document.body.appendChild(t);}
+  t.textContent=msg;requestAnimationFrame(()=>t.style.opacity='1');clearTimeout(toastT);toastT=setTimeout(()=>t.style.opacity='0',1900);}
+
+const hdr=$('hdr');addEventListener('scroll',()=>hdr.classList.toggle('stuck',scrollY>4),{passive:true});
+
+/* buttons */
+$('testStart').onclick=startTest;
+$('confBtn').onclick=startConf;
+document.querySelectorAll('.subact[data-mode]').forEach(b=>b.onclick=()=>{
+  const q=buildModeQueue(b.dataset.mode);
+  const names={spell:'拼字聽寫',en:'中→英回想',cloze:'句子克漏字'};
+  startSession(q,names[b.dataset.mode]);});
+
+function renderAll(){renderToday();renderFilters();renderList();renderTestScreen();renderStats();renderSettings();}
+renderAll();
+</script>
+</body>
+</html>
