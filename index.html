@@ -163,6 +163,22 @@ header.stuck{border-bottom-color:var(--line)}
 .card .m{font-size:14.5px;color:var(--ink-soft);margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .example{max-height:0;opacity:0;overflow:hidden;transition:max-height .3s ease,opacity .22s;padding:0 18px}
 .card.open .example{max-height:260px;opacity:1;padding-bottom:15px}
+/* 字首字根：燈泡按鈕與拆解面板 */
+.rt-btn{flex:0 0 auto;border:1px solid var(--line);background:var(--surface-2);color:var(--accent-ink);
+  width:40px;height:40px;border-radius:12px;display:grid;place-items:center;cursor:pointer;font-size:18px;transition:transform .12s}
+.rt-btn:active{transform:scale(.9)}.rt-btn[aria-expanded="true"]{background:var(--accent);border-color:var(--accent)}
+.roots{display:none;padding:0 18px 14px;border-top:1px dashed var(--line);margin-top:-2px}
+.roots.on{display:block}
+.rt-lbl{font-size:11.5px;color:var(--ink-faint);letter-spacing:.04em;margin:10px 0 6px;display:flex;align-items:center;gap:8px}
+.rt-theme{margin-left:auto;font-size:11.5px;color:var(--accent-ink);border:1px solid currentColor;border-radius:999px;padding:1px 8px}
+.rt-parts{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.rt-part{display:inline-grid;justify-items:center;padding:4px 10px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);border-bottom:3px solid var(--rc)}
+.rt-part b{font-family:"Newsreader",serif;font-weight:500;font-size:16px}
+.rt-part small{font-size:11.5px;color:var(--ink-soft)}
+.rt-p{--rc:var(--lv-B1)}.rt-r{--rc:var(--accent)}.rt-w{--rc:var(--lv-C1)}.rt-s{--rc:var(--lv-C2)}
+.rt-plus{color:var(--ink-faint)}
+.rt-story{margin:10px 0 0;font-size:13.5px;color:var(--ink-soft);padding-left:10px;border-left:2px solid var(--line)}
+.rt-more{margin-top:10px;border:1px solid var(--line);background:var(--surface);color:var(--accent-ink);border-radius:10px;padding:6px 12px;font-size:13px;cursor:pointer;font-family:inherit}
 .example .en{font-family:"Newsreader",serif;font-size:16px;line-height:1.5;display:flex;gap:9px;align-items:flex-start}
 .ex-play{flex:0 0 auto;color:var(--accent-ink);background:none;border:none;cursor:pointer;padding:2px;margin-top:2px}
 .ex-play svg{width:16px;height:16px;display:block}
@@ -449,6 +465,19 @@ const CONFUSABLES = [{"a": {"word": "affect", "phon": "/əˈfekt/", "pos": "v.",
 const LEVELS=["A1","A2","B1","B2","C1","C2"];
 const DAY=86400000;
 const WIDX=Object.fromEntries(WORDS.map(w=>[w.id,w]));
+/* 字首字根資料：打開網頁時在背景讀 roots.json，讀不到（例如直接雙擊打開檔案）就不顯示燈泡 */
+let ROOTS={};
+fetch('roots.json').then(r=>r.ok?r.json():{}).then(d=>{ROOTS=d||{};
+  const ws=document.getElementById('s-words');if(ws&&ws.classList.contains('active'))renderList();}).catch(()=>{});
+function rootsOf(w){return ROOTS[w.word]||ROOTS[w.word.toLowerCase()]||null;}
+function rootsParts(ps){return ps.map((p,i)=>(i?'<span class="rt-plus">+</span>':'')+
+  `<span class="rt-part rt-${p[1]}"><b>${p[0]}</b><small>${p[2]}</small></span>`).join('');}
+function rootsHTML(r){
+  return `<div class="rt-lbl">基礎拆解${r.t?`<span class="rt-theme">${r.t}</span>`:''}</div>
+    <div class="rt-parts">${rootsParts(r.b)}</div>
+    ${r.a?`<button class="rt-more" data-adv>展開進階拆解</button><div class="rt-adv" hidden>
+      <div class="rt-lbl">進階拆解</div><div class="rt-parts">${rootsParts(r.a)}</div></div>`:''}
+    ${r.s?`<p class="rt-story">${r.s}</p>`:''}`;}
 const $=id=>document.getElementById(id);
 const rand=()=>Math.random();
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -933,8 +962,10 @@ function renderList(){
           <div class="row2"><span class="sdot ${stt}"></span><span class="pill lv-${lv}">${lv}</span><span class="pos">${w.pos}</span></div>
           <div class="m">${w.mean}</div>
         </div>
+        ${rootsOf(w)&&rootsOf(w).b?`<button class="rt-btn" aria-label="看字首字根" aria-expanded="false">💡</button>`:''}
         <button class="spk-sm" aria-label="播放發音">${spkSVG}</button>
       </div>
+      ${rootsOf(w)&&rootsOf(w).b?`<div class="roots">${rootsHTML(rootsOf(w))}</div>`:''}
       <div class="example">
         ${w.ex?`<div class="en"><button class="ex-play" aria-label="播放例句">${playSVG}</button><span>${w.ex}</span></div>`:''}
         <button class="knownbtn ${km?'on':''}" data-known>${km?'✓ 已標記「我會」· 點此改回還不會':'我會這個字，別再考我'}</button>
@@ -947,6 +978,10 @@ function renderList(){
     card.querySelector('.spk-sm').onclick=e=>{e.stopPropagation();speak(w.word,e.currentTarget);};
     {const ep=card.querySelector('.ex-play');if(ep)ep.onclick=e=>{e.stopPropagation();speak(w.ex,null);};}
     card.querySelector('.card-main').onclick=()=>card.classList.toggle('open');
+    {const rb=card.querySelector('.rt-btn');if(rb)rb.onclick=e=>{e.stopPropagation();
+      const panel=card.querySelector('.roots');const on=panel.classList.toggle('on');rb.setAttribute('aria-expanded',on);};}
+    {const ab=card.querySelector('[data-adv]');if(ab)ab.onclick=e=>{e.stopPropagation();
+      const adv=card.querySelector('.rt-adv');adv.hidden=!adv.hidden;ab.textContent=adv.hidden?'展開進階拆解':'收起進階拆解';};}
     card.querySelector('[data-known]').onclick=e=>{e.stopPropagation();
       isKnownM(w)?unmarkKnown(w.id):markKnown(w.id);renderList();renderToday();renderStats();};
     card.querySelectorAll('.mini').forEach(m=>m.onclick=e=>{e.stopPropagation();
