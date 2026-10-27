@@ -322,6 +322,11 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in sr
 .lvinfo td:first-child{font-weight:700;color:var(--ink)}
 .lvinfo .src{font-size:11.5px;color:var(--ink-faint);margin:4px 0 0}
 .filters-ce{margin-top:8px}
+/* 翻卡設定 */
+.swset-sec{font-size:16px;font-weight:600;margin:18px 0 2px;display:grid}
+.swset-sec small{font-size:12.5px;font-weight:400;color:var(--ink-faint)}
+.swset-tip{margin-top:16px;font-size:13px;line-height:1.8;color:var(--ink-soft);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.sw-stop{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--accent-ink);border-radius:10px;padding:6px 10px;font-size:13px;cursor:pointer;font-family:inherit}
 /* 字根主題模式 */
 .rtm-entry{width:100%;margin-top:14px;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;
   background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow);font-family:inherit;color:var(--ink)}
@@ -390,7 +395,7 @@ footer{text-align:center;font-size:11.5px;color:var(--ink-faint);padding:30px 0 
   <!-- WORDS -->
   <section class="screen" id="s-words">
     <input class="wsearch" id="wsearch" placeholder="搜尋單字或中文意思…" autocapitalize="off" autocorrect="off" spellcheck="false">
-    <button class="btn primary block" id="swipeBtn" style="margin-top:10px">🃏 翻卡整理（左滑我會 · 右滑還不會）</button>
+    <button class="btn primary block" id="swipeBtn" style="margin-top:10px">🃏 翻卡整理（右滑我會 · 左滑還不會）</button>
     <div class="filters" id="filters"></div>
     <div class="count" id="count"></div>
     <div class="list" id="list"></div>
@@ -497,12 +502,31 @@ footer{text-align:center;font-size:11.5px;color:var(--ink-faint);padding:30px 0 
   <div class="ov-body" id="rtmBody"></div>
 </div>
 
+<!-- 翻卡設定 overlay -->
+<div class="overlay" id="swset">
+  <div class="ov-head">
+    <button class="close" id="swsetClose">✕</button>
+    <div style="flex:1;font-weight:600">翻卡整理</div>
+  </div>
+  <div class="ov-body">
+    <div class="swset-sec">想翻哪些字？<small>可以多選，符合任一個就會出現</small></div>
+    <div class="lvsys">CEFR</div><div class="lvgrid" id="swsLv"></div>
+    <div class="lvsys">大考中心</div><div class="lvgrid" id="swsCe"></div>
+    <div class="swset-sec">這次翻幾張？</div>
+    <div class="steps" id="swsN"></div>
+    <p class="lvhint" id="swsInfo"></p>
+    <div class="swset-tip">👉 右滑＝我會：約 3 週後抽查一次，答對就隔更久<br>👈 左滑＝還不會：之後「新字關」會優先教這些字<br>隨時可以按右上角「先到這裡」結束，滑過的都會存起來</div>
+    <button class="btn primary block" id="swsGo" style="margin-top:18px">開始翻卡</button>
+  </div>
+</div>
+
 <!-- swipe overlay -->
 <div class="overlay" id="sw">
   <div class="ov-head">
     <button class="close" id="swClose">✕</button>
     <div class="progress"><i id="swProg"></i></div>
     <div class="pc" id="swPc"></div>
+    <button class="sw-stop" id="swStop">先到這裡</button>
   </div>
   <div class="sw-body" id="swBody">
     <div class="sw-hint left" id="swHintL">↻ 還不會</div>
@@ -692,8 +716,12 @@ function startSession(queue,label){
 const PRESETS={light:{new:5,review:20,prod:6,cloze:6},standard:{new:8,review:30,prod:8,cloze:8},solid:{new:12,review:40,prod:10,cloze:10}};
 function preset(){return PRESETS[DB.settings.preset||'light'];}
 function ensureDaily(){const t=today();if(!DB.stats.daily||DB.stats.daily.day!==t)DB.stats.daily={day:t,new:false,review:false,prod:false,cloze:false,done:false};}
-function poolNew(){return WORDS.filter(w=>!DB.words[w.id]&&enabledW(w)).slice(0,preset().new);}
+function poolNew(){const n=preset().new;
+  const pri=priList().map(id=>WIDX[id]).filter(w=>w&&!DB.words[w.id]);   // 翻卡左滑「還不會」的字優先
+  const ids=new Set(pri.map(w=>w.id));
+  return pri.concat(WORDS.filter(w=>!ids.has(w.id)&&!DB.words[w.id]&&enabledW(w))).slice(0,n);}
 function poolReview(){const now=Date.now();return WORDS.filter(w=>{const s=DB.words[w.id];return s&&!s.manualKnown&&s.due&&s.due<=now;}).slice(0,preset().review);}
+
 function poolSeen(){return WORDS.filter(w=>{const s=DB.words[w.id];return s&&s.seen&&!s.manualKnown;});}
 function poolProd(){return shuffle(poolSeen()).slice(0,preset().prod);}
 function poolCloze(){return shuffle(poolSeen().filter(w=>w.ex.toLowerCase().includes(w.word.toLowerCase()))).slice(0,preset().cloze);}
@@ -957,17 +985,35 @@ function confDone(){
 
 /* ================= SWIPE DECK ================= */
 let SW=null;
-const SW_MAX=60;
-function startSwipe(){
-  const qq=wquery.trim(); const ql=qq.toLowerCase();
-  const pool=WORDS.filter(w=>{
-    if(!(wfilter==='all'||lvlOf(w)===wfilter))return false;
-    if(isKnownM(w))return false;                 // 已整理成「我會」的不再出現
-    if(qq&&!(w.word.toLowerCase().includes(ql)||w.mean.includes(qq)))return false;
-    return true;});
+/* 翻卡：先選範圍與張數。設定會記住 */
+function swCfg(){const s=DB.settings;
+  if(!s.swipe)s.swipe={levels:s.levels.slice(),ceec:(s.ceec||[]).slice(),n:20};return s.swipe;}
+function priList(){return DB.priority||(DB.priority=[]);}
+function swPool(cfg){const pri=new Set(priList());
+  return WORDS.filter(w=>{
+    if(!(cfg.levels.includes(lvlOf(w))||(ceOf(w)&&cfg.ceec.includes(ceOf(w)))))return false;
+    if(isKnownM(w)||pri.has(w.id))return false;   // 已標我會、已排進新字關的不再出現
+    const st=DB.words[w.id];if(st&&(st.reps||st.swiped))return false; // 已經在記憶曲線裡的字不用再整理
+    return true;});}
+function renderSwSet(){const c=swCfg();const tot=()=>c.levels.length+c.ceec.length;
+  $('swsLv').innerHTML=LEVELS.map(l=>`<button class="lvtog" data-l="${l}" aria-pressed="${c.levels.includes(l)}" style="--c:${lvColor(l)}">${l}</button>`).join('');
+  $('swsCe').innerHTML=CEEC.map(n=>`<button class="lvtog ce" data-n="${n}" aria-pressed="${c.ceec.includes(n)}">L${n}</button>`).join('');
+  $('swsN').innerHTML=[20,30,60].map(n=>`<button class="step" data-n="${n}" aria-pressed="${c.n===n}">${n} 張</button>`).join('');
+  $('swsLv').querySelectorAll('.lvtog').forEach(b=>b.onclick=()=>{const i=c.levels.indexOf(b.dataset.l);
+    if(i>=0){if(tot()>1)c.levels.splice(i,1);}else c.levels.push(b.dataset.l);save();renderSwSet();});
+  $('swsCe').querySelectorAll('.lvtog').forEach(b=>b.onclick=()=>{const n=+b.dataset.n;const i=c.ceec.indexOf(n);
+    if(i>=0){if(tot()>1)c.ceec.splice(i,1);}else c.ceec.push(n);save();renderSwSet();});
+  $('swsN').querySelectorAll('.step').forEach(b=>b.onclick=()=>{c.n=+b.dataset.n;save();renderSwSet();});
+  const left=swPool(c).length;
+  $('swsInfo').textContent=left?`這個範圍還有 ${left} 個字還沒整理`:'這個範圍的字都整理完了 🎉 換個等級試試';
+  $('swsGo').disabled=!left;}
+function startSwipe(){renderSwSet();$('swset').classList.add('active');}
+function goSwipe(){const c=swCfg();const pool=swPool(c);
   if(!pool.length){toast('這個範圍沒有可整理的字了 🎉');return;}
-  SW={cards:shuffle(pool).slice(0,SW_MAX),i:0,known:0,keep:0};
+  $('swset').classList.remove('active');
+  SW={cards:shuffle(pool).slice(0,c.n),i:0,known:0,keep:0};
   SW.total=SW.cards.length;
+  $('swStop').style.display='';
   $('sw').classList.add('active');swRender();
 }
 function swRender(){
@@ -1004,21 +1050,25 @@ function attachDrag(el,w){
 function flyOut(el,dir,w){
   if(SW.busy)return;SW.busy=true;
   el.style.transform=`translateX(${dir*640}px) rotate(${dir*22}deg)`;el.style.opacity='0';
-  if(dir>0){markKnown(w.id);SW.known++;}          // 右滑 = 我會了
-  else{if(isKnownM(w))unmarkKnown(w.id);SW.keep++;} // 左滑 = 還不會（保留）
+  if(dir>0){swKnown(w.id);SW.known++;}            // 右滑 = 我會：放進記憶曲線，約 3 週後抽查
+  else{const p=priList();if(!p.includes(w.id))p.push(w.id);save();SW.keep++;} // 左滑 = 還不會：排進新字關
   setTimeout(()=>{SW.busy=false;SW.i++;swRender();},220);
 }
+function swKnown(id){const st=DB.words[id]||(DB.words[id]={ease:2.5,interval:0,reps:0,seen:0,correct:0,wrong:0});
+  st.reps=3;st.interval=21;st.status='known';st.swiped=1;st.due=Date.now()+21*DAY;
+  const p=priList();const i=p.indexOf(id);if(i>=0)p.splice(i,1);save();}
 function swButton(dir){
   if(!SW||SW.busy)return;const top=$('swStack').querySelector('.sw-card.top');if(!top)return;
   top.style.transition='transform .28s ease,opacity .28s';flyOut(top,dir,SW.cards[SW.i]);
 }
 function swDone(){
+  $('swStop').style.display='none';
   $('swProg').style.width='100%';$('swPc').textContent='';
   $('swStack').innerHTML=`<div class="result" style="position:static">
     <div class="big serif">${SW.known}</div>
     <h3 class="serif">整理完成</h3>
-    <p>標記「我會」 <b>${SW.known}</b> 個，保留學習 <b>${SW.keep}</b> 個。</p>
-    <p style="color:var(--ink-faint);font-size:13px;margin-top:6px">標「我會」的字不會再出現在考試與這個牌堆裡。</p>
+    <p>這次翻了 <b>${SW.known+SW.keep}</b> 張：我會 <b>${SW.known}</b> 個，還不會 <b>${SW.keep}</b> 個。</p>
+    <p style="color:var(--ink-faint);font-size:13px;margin-top:6px">「我會」的字約 3 週後抽查一次；「還不會」的字，新字關會優先教。</p>
     <button class="btn primary block" style="margin-top:22px" id="swFin">完成</button></div>`;
   $('swActions').style.display='none';
   document.querySelector('.sw-legend').style.display='none';
@@ -1227,6 +1277,9 @@ $('wmore').onclick=()=>{wlimit+=WPAGE;renderList();};
 
 /* swipe deck */
 $('swipeBtn').onclick=startSwipe;
+$('swsGo').onclick=goSwipe;
+$('swsetClose').onclick=()=>$('swset').classList.remove('active');
+$('swStop').onclick=()=>{if(SW)swDone();};
 $('swClose').onclick=closeSwipe;
 $('swKnow').onclick=()=>swButton(1);
 $('swKeep').onclick=()=>swButton(-1);
