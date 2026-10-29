@@ -1178,7 +1178,7 @@ function testNext(){
       <div class="q-word-row"><div><div class="q-word serif">${w.word}</div><div class="q-phon">${w.phon}</div></div>
       <button class="spk mid" onclick="speak('${w.word.replace(/'/g,"")}',this)">${spkSVG}</button></div></div>
     <div class="opts">${opts.map(o=>`<button class="opt">${o}</button>`).join('')}</div>
-    <button class="btn ghost block" id="tSkip" style="margin-top:14px">🤔 不確定</button>`;
+    <button class="btn ghost block" id="tSkip" style="margin-top:14px">🤔 用猜的</button>`;
   const adv=(dAbility,delay)=>{TEST.ability=clamp(TEST.ability+dAbility,-0.5,5.5);
     TEST.step=Math.max(0.3,TEST.step*0.8);TEST.asked++;setTimeout(testNext,delay);};
   [...body.querySelectorAll('.opt')].forEach(b=>b.onclick=()=>{
@@ -1371,7 +1371,7 @@ function renderToday(){
   const nextKey=(quests.find(q=>!d[q.k])||{}).k;
   const cta=d.done
     ? `<div class="stamp">今日打卡完成 🎉<div class="stampsub">連續 ${DB.stats.checkStreak||0} 天 · 明天再來</div></div>`
-    : `<button class="btn primary block" id="contBtn">${doneN?'繼續':'開始'}（${doneN}/4）→</button>`;
+    : `<button class="btn primary block" id="contBtn">繼續打卡（${doneN}/4）→</button>`;
   $('checkin').innerHTML=`<div class="ci-head"><div class="ci-title serif">今日打卡</div><div class="ci-prog">${doneN}/4 關</div></div>
     <div class="quests">${rows}</div><div style="margin-top:14px">${cta}</div>`;
   $('checkin').querySelectorAll('.quest').forEach(b=>b.onclick=()=>startQuest(b.dataset.k));
