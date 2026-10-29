@@ -256,6 +256,13 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in sr
   padding:16px;font-size:22px;font-family:"Newsreader",serif;color:var(--ink);text-align:center;outline:none}
 .spell-in:focus{border-color:var(--accent)}
 .afterbar{margin-top:20px}
+.q-lrow{display:flex;align-items:center;gap:10px}.q-lrow .q-tip{margin-left:auto;width:34px;height:34px;font-size:16px}
+.q-zh{margin-top:12px;padding:10px 14px;border-radius:12px;background:var(--surface-2);border:1px dashed var(--line);color:var(--ink-soft);font-size:15px}
+.opt-done{display:flex;align-items:center;gap:10px}.opt-done .oen{margin-left:auto;font-size:16px;color:var(--ink-soft)}
+.opt-done .spk-sm{width:34px;height:34px}.opt-done span:first-child{flex:1}.opt-done .oen+.spk-sm{margin-left:0}
+.reveal .rzh{font-size:14px;color:var(--ink-soft);margin-top:4px}
+.rv-tip{margin-top:12px;padding-top:4px;border-top:1px dashed var(--line)}
+.tip-m{margin:0;font-size:14.5px;line-height:1.6}
 .reveal{background:var(--surface-2);border:1px solid var(--line);border-radius:16px;padding:16px}
 .reveal.wrong-note{border-color:color-mix(in srgb,var(--bad) 40%,var(--line))}
 .reveal .r1{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -423,6 +430,7 @@ footer{text-align:center;font-size:11.5px;color:var(--ink-faint);padding:30px 0 
     </div>
     <div class="sec"><h3>各等級掌握度</h3><div id="mastery"></div></div>
     <div class="sec"><h3>近 7 天</h3><div class="week" id="week"></div></div>
+    <div class="sec"><h3>錯題清單</h3><div id="weakInfo"></div></div>
     <div class="sec"><h3>最常答錯</h3><div class="missed" id="missed"></div></div>
   </section>
 
@@ -551,6 +559,10 @@ const WIDX=Object.fromEntries(WORDS.map(w=>[w.id,w]));
 let ROOTS={};
 fetch('roots.json').then(r=>r.ok?r.json():{}).then(d=>{ROOTS=d||{};renderRtmEntry();
   const ws=document.getElementById('s-words');if(ws&&ws.classList.contains('active'))renderList();}).catch(()=>{});
+/* 例句翻譯與記憶提示：hints.json，以單字 id 為鍵，z = 例句中文、m = 記憶提示 */
+let HINTS={};
+fetch('hints.json').then(r=>r.ok?r.json():{}).then(d=>{HINTS=d||{};}).catch(()=>{});
+function hintOf(w){return HINTS[w.id]||{};}
 /* ---------- 字根主題模式 ---------- */
 const RTM_EMO={"星星與宇宙":"🪐","移動與搬運":"📦","行走與步伐":"👣","看與觀察":"👀","說寫與畫":"✍️","聽與聲音":"🎵",
   "心智與感受":"💭","手與握持":"✋","生命與身體":"🌱","時間與順序":"⏳","方向與位置":"🧭","數量":"🔢","相同與不同":"⚖️",
@@ -623,7 +635,7 @@ const lvColor=l=>cssvar('--lv-'+l);
 function defaults(){return {v:1,words:{},overrides:{},theme:null,
   settings:{levels:["A1","A2","B1","B2","C1","C2"],ceec:[],newPerDay:5,preset:'light'},
   stats:{streak:0,lastDay:null,history:{},newToday:{day:null,count:0},answered:0,right:0,testLevel:null,
-    checkStreak:0,lastCheckDay:null,daily:{day:null,new:false,review:false,prod:false,cloze:false,done:false}}};}
+    checkStreak:0,lastCheckDay:null,daily:{day:null,new:false,review:false,prod:false,cloze:false,done:false}},weak:{}};}
 let DB=defaults();
 function load(){try{const r=localStorage.getItem('lexi.v1');if(r){const d=JSON.parse(r);DB=Object.assign(defaults(),d);
   DB.settings=Object.assign(defaults().settings,d.settings||{});DB.stats=Object.assign(defaults().stats,d.stats||{});
@@ -700,22 +712,49 @@ function distractors(w,field,n){
     if(arr.length>=n)break;if(!arr.includes(m)&&m!==w[field])arr.push(m);}}
   return arr;
 }
+function tipHTML(w){   // 💡 面板：字首字根＋記憶提示
+  const r=rootsOf(w),h=hintOf(w);const hasR=r&&r.b&&r.b.length>1;
+  if(!hasR&&!h.m)return '';
+  return (hasR?rootsHTML(r):'')+(h.m?`<div class="rt-lbl">記憶提示</div><p class="tip-m">${h.m}</p>`:'');}
+function tipToggle(btn){const p=btn.closest('.reveal').querySelector('.rv-tip');const on=p.hidden;p.hidden=!on;btn.setAttribute('aria-expanded',on);}
 function revealHTML(w){
+  const tip=tipHTML(w),h=hintOf(w);
   return `<div class="r1"><div><div class="rw serif">${w.word}</div><div class="rp">${w.phon} · <span class="pos">${w.pos}</span></div><div style="display:flex;gap:6px;margin-top:6px">${pillsHTML(w)}</div></div>
-    <button class="spk-sm" onclick="speak('${w.word.replace(/'/g,"")}',this)">${spkSVG}</button></div>
-    <div class="rm">${w.mean}</div><div class="rex">${w.ex}</div>`;
+    <div style="display:flex;gap:8px">${tip?`<button class="rt-btn" aria-label="記憶提示" aria-expanded="false" onclick="tipToggle(this)">💡</button>`:''}
+    <button class="spk-sm" onclick="speak('${w.word.replace(/'/g,"")}',this)">${spkSVG}</button></div></div>
+    <div class="rm">${w.mean}</div>${w.ex?`<div class="rex">${w.ex}</div>`:''}${h.z?`<div class="rzh">${h.z}</div>`:''}
+    ${tip?`<div class="rv-tip" hidden onclick="const b=event.target.closest('[data-adv]');if(b){const a=this.querySelector('.rt-adv');a.hidden=!a.hidden;b.textContent=a.hidden?'展開進階拆解':'收起進階拆解';}">${tip}</div>`:''}`;
 }
+function qTipHTML(w){const z=hintOf(w).z;   // 題目上的 💡：看句子的中文意思
+  return z?`<button class="rt-btn q-tip" aria-label="看中文翻譯" aria-expanded="false" onclick="const p=$('qZh');p.hidden=!p.hidden;this.setAttribute('aria-expanded',!p.hidden)">💡</button>`:'';}
+function qZhHTML(w){const z=hintOf(w).z;return z?`<div class="q-zh" id="qZh" hidden>${z}</div>`:'';}
 
 /* ================= SESSION ================= */
 let SES=null;
 function startSession(queue,label){
   if(!queue.length){toast('目前沒有要練習的字');return;}
-  SES={queue:queue.slice(),answered:0,right:0,total:queue.length,seen0:new Set(queue),label:label||'今日學習'};
+  SES={queue:queue.slice(),answered:0,right:0,total:queue.length,seen0:new Set(queue),label:label||'今日學習',retry:{}};UNDO=null;
   $('ov').classList.add('active');nextCard();
 }
 const PRESETS={light:{new:5,review:20,prod:6,cloze:6},standard:{new:8,review:30,prod:8,cloze:8},solid:{new:12,review:40,prod:10,cloze:10}};
 function preset(){return PRESETS[DB.settings.preset||'light'];}
 function ensureDaily(){const t=today();if(!DB.stats.daily||DB.stats.daily.day!==t)DB.stats.daily={day:t,new:false,review:false,prod:false,cloze:false,done:false};}
+/* ---------- 錯題清單：答錯或按「猜的」→ 之後的測驗優先出；三個不同的日子都答對才移出 ---------- */
+const WEAK_DAYS=3;
+function weakMap(){return DB.weak||(DB.weak={});}
+function weakMark(id,q){const m=weakMap(),t=today();
+  if(q<2){m[id]={n:0,d:null};return;}          // 答錯或猜的：放進清單（次數歸零）
+  const e=m[id];if(!e||e.d===t)return;          // 同一天只算一次
+  e.n++;e.d=t;if(e.n>=WEAK_DAYS)delete m[id];}
+function weakPool(k,filter){const t=today(),m=weakMap();   // 今天已答對過的先不出，讓它分散到不同天
+  return shuffle(Object.keys(m).filter(id=>m[id].d!==t).map(id=>WIDX[id])
+    .filter(w=>w&&!(DB.words[w.id]||{}).manualKnown&&(!filter||filter(w)))).slice(0,k);}
+const halfOf=n=>Math.max(1,Math.floor(n/2));
+function mixWeak(items,n,filter,mk){             // 最多一半換成錯題，其餘照原本的方式出
+  const idOf=x=>typeof x==='object'?x.id:x;const have=new Set(items.map(idOf));
+  const wk=weakPool(n,filter).filter(w=>!have.has(w.id)).slice(0,halfOf(n));
+  return shuffle(items.slice(0,Math.max(0,n-wk.length)).concat(wk.map(mk||(w=>w.id))));}
+const hasEx=w=>w.ex.toLowerCase().includes(w.word.toLowerCase());
 function poolNew(){const n=preset().new;
   const pri=priList().map(id=>WIDX[id]).filter(w=>w&&!DB.words[w.id]);   // 翻卡左滑「還不會」的字優先
   const ids=new Set(pri.map(w=>w.id));
@@ -728,12 +767,13 @@ function poolCloze(){return shuffle(poolSeen().filter(w=>w.ex.toLowerCase().incl
 function emptyMsg(k){return k==='review'?'今天沒有到期的字，這關直接過 ✓':'目前還沒有可練的字，先做前面的關卡 ✓';}
 function startQuest(key){
   ensureDaily();let items=[],label='';
-  if(key==='new'){items=poolNew().map(w=>w.id);label='新字關';}
-  else if(key==='review'){items=poolReview().map(w=>w.id);label='複習關';}
-  else if(key==='prod'){items=poolProd().map(w=>({id:w.id,forceType:rand()<0.5?'recall':'spell'}));label='產出關';}
-  else if(key==='cloze'){items=poolCloze().map(w=>({id:w.id,forceType:'cloze'}));label='克漏字關';}
+  if(key==='new'){const nw=poolNew().map(w=>w.id);   // 新字不減少，錯題另外加在上面
+    items=shuffle(nw.concat(weakPool(halfOf(preset().new)).filter(w=>!nw.includes(w.id)).map(w=>w.id)));label='新字關';}
+  else if(key==='review'){items=mixWeak(poolReview().map(w=>w.id),preset().review);label='複習關';}
+  else if(key==='prod'){const mk=w=>({id:w.id,forceType:rand()<0.5?'recall':'spell'});items=mixWeak(poolProd().map(mk),preset().prod,null,mk);label='產出關';}
+  else if(key==='cloze'){const mk=w=>({id:w.id,forceType:'cloze'});items=mixWeak(poolCloze().map(mk),preset().cloze,hasEx,mk);label='克漏字關';}
   if(!items.length){completeQuest(key);toast(emptyMsg(key));renderToday();return;}
-  SES={queue:items.slice(),answered:0,right:0,total:items.length,label,questKey:key,onePass:true};
+  SES={queue:items.slice(),answered:0,right:0,total:items.length,label,questKey:key,retry:{}};UNDO=null;
   $('ov').classList.add('active');nextCard();
 }
 function completeQuest(key){ensureDaily();if(DB.stats.daily[key]){return;}DB.stats.daily[key]=true;
@@ -742,8 +782,9 @@ function bumpCheck(){const t=today();if(DB.stats.lastCheckDay===t)return;
   const y=dstr(new Date(Date.now()-DAY));DB.stats.checkStreak=(DB.stats.lastCheckDay===y)?(DB.stats.checkStreak||0)+1:1;DB.stats.lastCheckDay=t;}
 function buildModeQueue(mode){ // fixed-type practice on a sample of enabled words
   let pool=WORDS.filter(w=>enabledW(w)&&!isKnownM(w));
-  if(mode==='cloze')pool=pool.filter(w=>w.ex.toLowerCase().includes(w.word.toLowerCase()));
-  return shuffle(pool).slice(0,12).map(w=>({id:w.id,forceType:mode}));
+  if(mode==='cloze')pool=pool.filter(hasEx);
+  const n=12,wk=weakPool(halfOf(n),mode==='cloze'?hasEx:null),ids=new Set(wk.map(w=>w.id));
+  return shuffle(wk.concat(shuffle(pool.filter(w=>!ids.has(w.id))).slice(0,n-wk.length))).map(w=>({id:w.id,forceType:mode}));
 }
 function pickType(st){
   const r=st?(st.reps||0):0;
@@ -769,11 +810,20 @@ function nextCard(){
       <div class="q-word serif" style="font-size:34px">${w.mean}</div>`,
       w.word,distractors(w,'word',3),true);
   else if(type==='cloze'){const re=new RegExp(w.word,'i');const s=w.ex.replace(re,'<u>?</u>');
-    renderMC(w,`<div class="q-label">選出填入空格的字</div><div class="q-cloze serif">${s}</div>`,
+    renderMC(w,`<div class="q-label q-lrow">選出填入空格的字${qTipHTML(w)}</div><div class="q-cloze serif">${s}</div>${qZhHTML(w)}`,
       w.word,distractors(w,'word',3),true);}
   else if(type==='spell')renderSpell(w);
   else renderRecall(w);
+  addUndoBtn();
 }
+function optSpeak(btns,w,correct){   // 答完後：每個選項加上英文與發音
+  const isZh=SES&&SES.curType==='zh';
+  btns.forEach(x=>{const t=x.textContent;
+    const ow=t===correct?w:(isZh?WORDS.find(v=>v.mean===t):WORDS.find(v=>v.word===t));
+    if(!ow)return;const word=ow.word.replace(/'/g,"");
+    const d=document.createElement('div');d.className=x.className+' opt-done';
+    d.innerHTML=`<span>${t}</span>${isZh?`<span class="oen serif">${ow.word}</span>`:''}<button class="spk-sm" onclick="speak('${word}',this)">${spkSVG}</button>`;
+    x.replaceWith(d);});}
 function renderMC(w,promptHTML,correct,dist,serifOpt){
   const body=$('ovBody');
   const opts=shuffle(dist.concat([correct]));
@@ -785,7 +835,8 @@ function renderMC(w,promptHTML,correct,dist,serifOpt){
     if(body.dataset.done)return;body.dataset.done='1';
     const ok=b.textContent===correct;
     btns.forEach(x=>{x.disabled=true;if(x.textContent===correct)x.classList.add('correct');});
-    if(ok){b.classList.add('correct');afterCorrect(w);}else{b.classList.add('wrong');afterWrong(w);}
+    if(!ok)b.classList.add('wrong');optSpeak(btns,w,correct);
+    if(ok)afterCorrect(w);else afterWrong(w);
   });
 }
 function hintText(word,lv){const n=word.length;if(lv>=3)return word.split('').join(' ');
@@ -817,9 +868,9 @@ function renderRecall(w){
   const body=$('ovBody');
   const hasEx=w.ex.toLowerCase().includes(w.word.toLowerCase());
   const sent=hasEx?w.ex.replace(new RegExp(w.word,'i'),'____'):'';
-  body.innerHTML=`<div class="q-prompt"><div class="q-label">看意思，把英文單字拼出來</div>
+  body.innerHTML=`<div class="q-prompt"><div class="q-label q-lrow">看意思，把英文單字拼出來${hasEx?qTipHTML(w):''}</div>
       <div class="q-word serif" style="font-size:30px">${w.mean}</div>
-      ${hasEx?`<div class="q-cloze serif" style="font-size:17px;margin-top:12px;color:var(--ink-soft)">${sent}</div>`:''}
+      ${hasEx?`<div class="q-cloze serif" style="font-size:17px;margin-top:12px;color:var(--ink-soft)">${sent}</div>${qZhHTML(w)}`:''}
       <input class="spell-in" id="sIn" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="輸入單字">
       <div style="text-align:center;margin-top:12px"><button class="spk-sm" id="rHint" style="display:inline-grid">${spkSVG}</button></div></div>
     <div class="afterbar" id="afterbar">
@@ -851,22 +902,37 @@ function afterWrong(w){
   $('bCont').onclick=()=>grade(w,0);
   bar.scrollIntoView({behavior:'smooth',block:'end'});
 }
+let UNDO=null;   // 只保留一題：按「↩ 上一題」回到上一題的答案畫面重選
 function grade(w,q){
+  {const c=$('ovBody').cloneNode(true);const u=c.querySelector('#undoBar');if(u)u.remove();const inp=$('sIn');
+   UNDO={db:JSON.stringify(DB),ses:Object.assign({},SES,{queue:SES.queue.slice(),retry:Object.assign({},SES.retry||{})}),
+     html:c.innerHTML,val:inp?inp.value:null,w,ok:q>=1};}
   const type=SES?SES.curType:'zh';
   const isProd=(type==='spell'||type==='recall');   // 用打的 = 產出
   const isNew=!DB.words[w.id];
   const st=DB.words[w.id]||(DB.words[w.id]={ease:2.5,interval:0,reps:0,status:'new',seen:0,correct:0,wrong:0});
   if(q===2&&isProd)st.prod=true;                     // 通過產出題才記一筆
-  schedule(st,q);
+  schedule(st,q);weakMark(w.id,q);
   if(st.status==='known'&&!st.prod)st.status='review'; // 只認得、還沒產出過 → 不算已掌握
   if(isNew)incNew();
   DB.stats.answered++;if(q>=1)DB.stats.right++;
   SES.answered++;if(q>=1)SES.right++;
   markStudied();save();
   const item=SES.queue.shift();
-  if(q<2&&!SES.onePass){const pos=Math.min(SES.queue.length,3);SES.queue.splice(pos,0,item);}
+  if(q<2){const r=SES.retry[w.id]||0;            // 同一場幾題後再考一次（最多再出 2 次）
+    if(r<2){SES.retry[w.id]=r+1;const pos=Math.min(SES.queue.length,3);SES.queue.splice(pos,0,item);}}
   nextCard();
 }
+function addUndoBtn(){if(!UNDO)return;const d=document.createElement('div');d.id='undoBar';
+  d.style.cssText='text-align:center;margin-top:22px';
+  d.innerHTML='<button class="btn ghost" id="undoBtn" style="font-size:14px;padding:8px 18px">↩ 上一題</button>';
+  $('ovBody').appendChild(d);$('undoBtn').onclick=undoLast;}
+function undoLast(){if(!UNDO)return;const u=UNDO;UNDO=null;
+  window.speechSynthesis&&speechSynthesis.cancel();
+  DB=JSON.parse(u.db);save();SES=u.ses;updateProg();
+  const body=$('ovBody');body.innerHTML=u.html;body.dataset.done='1';
+  const inp=$('sIn');if(inp&&u.val!=null)inp.value=u.val;
+  u.ok?afterCorrect(u.w):afterWrong(u.w);}
 function updateProg(){
   const totalGuess=SES.answered+SES.queue.length;
   const pc=totalGuess?Math.round(SES.answered/totalGuess*100):0;
@@ -886,9 +952,9 @@ function endSession(){
       <div class="s"><div class="n serif">${acc}%</div><div class="l">正確率</div></div>
       <div class="s"><div class="n serif">${DB.stats.checkStreak||0}</div><div class="l">打卡連續</div></div></div>
     <button class="btn primary block" onclick="closeOv()">回今日</button></div>`;
-  SES=null;
+  SES=null;addUndoBtn();
 }
-function closeOv(){$('ov').classList.remove('active');SES=null;window.speechSynthesis&&speechSynthesis.cancel();renderToday();renderStats();}
+function closeOv(){$('ov').classList.remove('active');SES=null;UNDO=null;window.speechSynthesis&&speechSynthesis.cancel();renderToday();renderStats();}
 $('ovClose').onclick=()=>{if(SES&&SES.answered>0&&SES.queue.length){if(!confirm('離開這次練習？進度已存。'))return;}closeOv();};
 
 /* ================= TEST ================= */
@@ -1201,6 +1267,10 @@ function renderStats(){
   const wk=['日','一','二','三','四','五','六'];
   $('week').innerHTML=days.map(d=>{const c=DB.stats.history[dstr(d)]||0;const h=Math.round(c/max*88);
     return `<div class="d"><div class="bar" style="height:${c?Math.max(4,h):3}px;opacity:${c?0.9:0.25}"></div><div class="lab">${wk[d.getDay()]}</div></div>`;}).join('');
+  // 錯題清單
+  const wl=Object.keys(weakMap()).map(id=>WIDX[id]).filter(Boolean);
+  $('weakInfo').innerHTML=`<p style="margin:0 0 8px;color:var(--ink-soft);font-size:14px">${wl.length?`目前 ${wl.length} 個字待加強。之後的測驗會優先出這些字，三個不同的日子都答對就會移出。`:'目前沒有待加強的字。答錯或按「我是猜的」的字會放進來。'}</p>`+
+    `<div class="missed">${wl.slice(0,8).map(w=>{const e=DB.weak[w.id];return `<div class="mi"><span class="w serif">${w.word}</span><span class="m" style="flex:1;color:var(--ink-soft);font-size:13px">${w.mean}</span><span class="c" style="color:var(--ink-soft)">${e.n}/${WEAK_DAYS} 天</span></div>`;}).join('')}</div>`;
   // most missed
   const missed=seen.map(w=>({w,n:(DB.words[w.id].wrong||0)})).filter(x=>x.n>0).sort((a,b)=>b.n-a.n).slice(0,5);
   $('missed').innerHTML=missed.length?missed.map(x=>`<div class="mi"><span class="w serif">${x.w.word}</span><span class="m" style="flex:1;color:var(--ink-soft);font-size:13px">${x.w.mean}</span><span class="c">錯 ${x.n}</span></div>`).join(''):`<div class="empty">還沒有答錯記錄。</div>`;

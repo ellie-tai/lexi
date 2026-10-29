@@ -10,6 +10,9 @@
 - 額外練習：拼字聽寫、中→英回想、句子克漏字、易混淆字
 - 翻卡整理：先選等級（可多選）與張數（20／30／60），右滑我會（約 3 週後抽查）、左滑還不會（優先排進新字關），可隨時結束
 - 複習：SM-2 間隔重複（依遺忘曲線，1 天 → 6 天 → 約 2.5 倍遞增）
+- 錯題清單：答錯或按「我是猜的」的字，同一場幾題後再考一次，之後的每日關卡與額外練習也會優先出（最多佔一半）；三個不同的日子都答對才移出
+- 答題時：克漏字題目右上角 💡 看整句中文；答完後每個選項都能按發音；答案卡 💡 看字根拆解與記憶提示
+- 「↩ 上一題」：手滑按錯時，可以退回一題重選
 - 9252 個單字：CEFR A1–C2，並完整收錄大考中心《高中英文參考詞彙表》（七千單）的實詞
 - 兩套分級：CEFR 與大考中心 L1–L6 可同時勾選，單字卡顯示兩種標籤
 - 程度測驗：自動調整難度，估計 CEFR 程度並建議對應的大考級別
@@ -23,6 +26,7 @@
 |---|---|
 | `index.html` | 網頁 App 本體（含單字資料） |
 | `roots.json` | 字首字根拆解資料，網頁打開時在背景讀取 |
+| `hints.json` | 例句（克漏字題目）中文翻譯與記憶提示（試做 100 字） |
 
 本機測試：因為瀏覽器不允許直接雙擊打開的網頁讀取其他檔案，請在資料夾內執行
 `python -m http.server`，再打開 http://localhost:8000 。
@@ -33,6 +37,7 @@
 - **新增單字的音標**：取自 [ECDICT](https://github.com/skywind3000/ECDICT)（MIT License, Copyright (c) 2025 Linwei）。
 - **等級說明**：多益對照依 ETS《Mapping the TOEIC Tests on the CEFR》；全民英檢對照依教育部公告英語能力檢定對照表。
 
+- **例句翻譯與記憶提示（`hints.json`）**：由 Claude（Anthropic）協助撰寫。
 - **字首字根資料（`roots.json`）**：由 Claude（Anthropic）協助產生，並以 MorphoLex-en 比對檢查。
   - MorphoLex-en：Sánchez-Gutiérrez, C.H., Mailhot, H., Deacon, S.H. et al. *Behavior Research Methods* (2017). https://github.com/hugomailhot/MorphoLex-en ，授權 CC BY-NC-SA 4.0。
   - 因此 `roots.json` 以 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 授權釋出，僅限非商業使用。
